@@ -40,4 +40,4 @@ func (i *LoginInteractor) Execute(ctx context.Context, input dtos.LoginInput) (*
 	return &dtos.LoginOutput{User: user, AccessToken: accessToken}, nil
 }
 
-var _ ports.Login = (*LoginInteractor)(nil)
+var _ ports.LoginUseCase = (*LoginInteractor)(nil)
