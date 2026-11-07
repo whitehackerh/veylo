@@ -60,7 +60,6 @@ func (m *JWTManager) Verify(token string) (string, error) {
 	if err != nil || !hmac.Equal(signature, m.sign(unsigned)) {
 		return "", errors.New("invalid token")
 	}
-
 	headerBytes, err := base64.RawURLEncoding.DecodeString(parts[0])
 	if err != nil {
 		return "", errors.New("invalid token")
@@ -69,7 +68,6 @@ func (m *JWTManager) Verify(token string) (string, error) {
 	if err := json.Unmarshal(headerBytes, &header); err != nil || header.Algorithm != "HS256" || header.Type != "JWT" {
 		return "", errors.New("invalid token")
 	}
-
 	claimsBytes, err := base64.RawURLEncoding.DecodeString(parts[1])
 	if err != nil {
 		return "", errors.New("invalid token")
