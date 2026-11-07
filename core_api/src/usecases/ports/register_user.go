@@ -6,6 +6,6 @@ import (
 	"github.com/whitehackerh/veylo/api_server/src/usecases/dtos"
 )
 
-type RegisterUser interface {
+type RegisterUserUseCase interface {
 	Execute(ctx context.Context, input dtos.RegisterUserInput) (*dtos.RegisterUserOutput, error)
 }
