@@ -8,7 +8,7 @@ import (
 	"github.com/google/uuid"
 	"golang.org/x/crypto/bcrypt"
 
-	"github.com/whitehackerh/veylo/api_server/src/entities"
+	"github.com/whitehackerh/veylo/api_server/src/domain"
 	"github.com/whitehackerh/veylo/api_server/src/usecases/dtos"
 	"github.com/whitehackerh/veylo/api_server/src/usecases/repositories"
 	"github.com/whitehackerh/veylo/api_server/src/usecases/shared"
@@ -22,7 +22,7 @@ func NewRegisterUserInteractor(userRepository repositories.UserRepository) *Regi
 	return &RegisterUserInteractor{userRepository: userRepository}
 }
 
-func (i *RegisterUserInteractor) Execute(ctx context.Context, input dtos.RegisterUserInput) (*entities.User, error) {
+func (i *RegisterUserInteractor) Execute(ctx context.Context, input dtos.RegisterUserInput) (*dtos.RegisterUserOutput, error) {
 	email := strings.ToLower(strings.TrimSpace(input.Email))
 	parsedEmail, err := mail.ParseAddress(email)
 	if err != nil || parsedEmail.Address != email || len(input.Password) < 8 || len(input.Password) > 72 {
@@ -34,7 +34,7 @@ func (i *RegisterUserInteractor) Execute(ctx context.Context, input dtos.Registe
 		return nil, err
 	}
 
-	user := &entities.User{
+	user := &domain.User{
 		ID:           uuid.NewString(),
 		Email:        email,
 		PasswordHash: string(passwordHash),
@@ -43,5 +43,5 @@ func (i *RegisterUserInteractor) Execute(ctx context.Context, input dtos.Registe
 		return nil, err
 	}
 
-	return user, nil
+	return &dtos.RegisterUserOutput{User: user}, nil
 }
