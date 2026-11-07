@@ -9,6 +9,7 @@ import (
 	"golang.org/x/crypto/bcrypt"
 
 	"github.com/whitehackerh/veylo/api_server/src/entities"
+	"github.com/whitehackerh/veylo/api_server/src/usecases/dtos"
 	"github.com/whitehackerh/veylo/api_server/src/usecases/repositories"
 	"github.com/whitehackerh/veylo/api_server/src/usecases/shared"
 )
@@ -21,14 +22,14 @@ func NewRegisterUserInteractor(userRepository repositories.UserRepository) *Regi
 	return &RegisterUserInteractor{userRepository: userRepository}
 }
 
-func (i *RegisterUserInteractor) Execute(ctx context.Context, email string, password string) (*entities.User, error) {
-	email = strings.ToLower(strings.TrimSpace(email))
+func (i *RegisterUserInteractor) Execute(ctx context.Context, input dtos.RegisterUserInput) (*entities.User, error) {
+	email := strings.ToLower(strings.TrimSpace(input.Email))
 	parsedEmail, err := mail.ParseAddress(email)
-	if err != nil || parsedEmail.Address != email || len(password) < 8 || len(password) > 72 {
+	if err != nil || parsedEmail.Address != email || len(input.Password) < 8 || len(input.Password) > 72 {
 		return nil, shared.ErrInvalidRegistrationInput
 	}
 
-	passwordHash, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
+	passwordHash, err := bcrypt.GenerateFromPassword([]byte(input.Password), bcrypt.DefaultCost)
 	if err != nil {
 		return nil, err
 	}
