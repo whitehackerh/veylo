@@ -7,6 +7,7 @@ import (
 	"golang.org/x/crypto/bcrypt"
 
 	"github.com/whitehackerh/veylo/api_server/src/usecases/dtos"
+	"github.com/whitehackerh/veylo/api_server/src/usecases/ports"
 	"github.com/whitehackerh/veylo/api_server/src/usecases/repositories"
 	"github.com/whitehackerh/veylo/api_server/src/usecases/security"
 	"github.com/whitehackerh/veylo/api_server/src/usecases/shared"
@@ -18,10 +19,7 @@ type LoginInteractor struct {
 }
 
 func NewLoginInteractor(userRepository repositories.UserRepository, tokenManager security.TokenManager) *LoginInteractor {
-	return &LoginInteractor{
-		userRepository: userRepository,
-		tokenManager:   tokenManager,
-	}
+	return &LoginInteractor{userRepository: userRepository, tokenManager: tokenManager}
 }
 
 func (i *LoginInteractor) Execute(ctx context.Context, input dtos.LoginInput) (*dtos.LoginOutput, error) {
@@ -39,8 +37,7 @@ func (i *LoginInteractor) Execute(ctx context.Context, input dtos.LoginInput) (*
 		return nil, err
 	}
 
-	return &dtos.LoginOutput{
-		User:        user,
-		AccessToken: accessToken,
-	}, nil
+	return &dtos.LoginOutput{User: user, AccessToken: accessToken}, nil
 }
+
+var _ ports.Login = (*LoginInteractor)(nil)
