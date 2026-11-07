@@ -1,0 +1,7 @@
+package: openapi
+output: src/presentation/openapi/types.gen.go
+generate:
+  models: true
+  echo5-server: true
+output-options:
+  skip-prune: true
