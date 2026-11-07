@@ -1,13 +1,11 @@
 package handlers
 
 import (
-	"context"
 	"errors"
 	"net/http"
 
 	"github.com/labstack/echo/v5"
 
-	"github.com/whitehackerh/veylo/api_server/src/entities"
 	"github.com/whitehackerh/veylo/api_server/src/presentation/presenters"
 	"github.com/whitehackerh/veylo/api_server/src/usecases/dtos"
 	"github.com/whitehackerh/veylo/api_server/src/usecases/interactors"
@@ -74,12 +72,8 @@ func (h *AuthHandler) Login(c *echo.Context) error {
 		return c.JSON(http.StatusInternalServerError, map[string]string{"error": "failed to login"})
 	}
 
-	user, ok := result.User.(*entities.User)
-	if !ok {
-		return c.JSON(http.StatusInternalServerError, map[string]string{"error": "failed to login"})
-	}
 	return c.JSON(http.StatusOK, presenters.LoginResponse{
-		User:        presenters.ToUserResponse(user),
+		User:        presenters.ToUserResponse(result.User),
 		AccessToken: result.AccessToken,
 		TokenType:   "Bearer",
 	})
@@ -93,9 +87,11 @@ func (h *AuthHandler) Me(c *echo.Context) error {
 
 	user, err := h.getUserInteractor.Execute(c.Request().Context(), userID)
 	if err != nil {
+		if errors.Is(err, shared.ErrUserNotFound) {
+			return c.JSON(http.StatusUnauthorized, map[string]string{"error": "unauthorized"})
+		}
 		return c.JSON(http.StatusInternalServerError, map[string]string{"error": "failed to get user"})
 	}
+
 	return c.JSON(http.StatusOK, presenters.ToUserResponse(user))
 }
-
-var _ = context.Background
