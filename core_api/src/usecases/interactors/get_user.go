@@ -24,4 +24,4 @@ func (i *GetUserInteractor) Execute(ctx context.Context, input dtos.GetUserInput
 	return &dtos.GetUserOutput{User: user}, nil
 }
 
-var _ ports.GetUser = (*GetUserInteractor)(nil)
+var _ ports.GetUserUseCase = (*GetUserInteractor)(nil)
