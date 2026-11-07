@@ -8,14 +8,14 @@ import (
 
 	"github.com/whitehackerh/veylo/api_server/src/presentation/presenters"
 	"github.com/whitehackerh/veylo/api_server/src/usecases/dtos"
-	"github.com/whitehackerh/veylo/api_server/src/usecases/interactors"
+	"github.com/whitehackerh/veylo/api_server/src/usecases/ports"
 	"github.com/whitehackerh/veylo/api_server/src/usecases/shared"
 )
 
 type AuthHandler struct {
-	registerUserInteractor *interactors.RegisterUserInteractor
-	loginInteractor        *interactors.LoginInteractor
-	getUserInteractor      *interactors.GetUserInteractor
+	registerUser ports.RegisterUser
+	login        ports.Login
+	getUser      ports.GetUser
 }
 
 type credentialsRequest struct {
@@ -23,16 +23,8 @@ type credentialsRequest struct {
 	Password string `json:"password"`
 }
 
-func NewAuthHandler(
-	registerUserInteractor *interactors.RegisterUserInteractor,
-	loginInteractor *interactors.LoginInteractor,
-	getUserInteractor *interactors.GetUserInteractor,
-) *AuthHandler {
-	return &AuthHandler{
-		registerUserInteractor: registerUserInteractor,
-		loginInteractor:        loginInteractor,
-		getUserInteractor:      getUserInteractor,
-	}
+func NewAuthHandler(registerUser ports.RegisterUser, login ports.Login, getUser ports.GetUser) *AuthHandler {
+	return &AuthHandler{registerUser: registerUser, login: login, getUser: getUser}
 }
 
 func (h *AuthHandler) Register(c *echo.Context) error {
@@ -41,9 +33,8 @@ func (h *AuthHandler) Register(c *echo.Context) error {
 		return c.JSON(http.StatusBadRequest, map[string]string{"error": "invalid request body"})
 	}
 
-	user, err := h.registerUserInteractor.Execute(c.Request().Context(), dtos.RegisterUserInput{
-		Email:    request.Email,
-		Password: request.Password,
+	output, err := h.registerUser.Execute(c.Request().Context(), dtos.RegisterUserInput{
+		Email: request.Email, Password: request.Password,
 	})
 	if err != nil {
 		if errors.Is(err, shared.ErrEmailAlreadyExists) {
@@ -54,8 +45,7 @@ func (h *AuthHandler) Register(c *echo.Context) error {
 		}
 		return c.JSON(http.StatusInternalServerError, map[string]string{"error": "failed to register user"})
 	}
-
-	return c.JSON(http.StatusCreated, presenters.ToUserResponse(user))
+	return c.JSON(http.StatusCreated, presenters.ToUserResponse(output.User))
 }
 
 func (h *AuthHandler) Login(c *echo.Context) error {
@@ -64,9 +54,8 @@ func (h *AuthHandler) Login(c *echo.Context) error {
 		return c.JSON(http.StatusBadRequest, map[string]string{"error": "invalid request body"})
 	}
 
-	result, err := h.loginInteractor.Execute(c.Request().Context(), dtos.LoginInput{
-		Email:    request.Email,
-		Password: request.Password,
+	output, err := h.login.Execute(c.Request().Context(), dtos.LoginInput{
+		Email: request.Email, Password: request.Password,
 	})
 	if err != nil {
 		if errors.Is(err, shared.ErrInvalidCredentials) {
@@ -74,11 +63,8 @@ func (h *AuthHandler) Login(c *echo.Context) error {
 		}
 		return c.JSON(http.StatusInternalServerError, map[string]string{"error": "failed to login"})
 	}
-
 	return c.JSON(http.StatusOK, presenters.LoginResponse{
-		User:        presenters.ToUserResponse(result.User),
-		AccessToken: result.AccessToken,
-		TokenType:   "Bearer",
+		User: presenters.ToUserResponse(output.User), AccessToken: output.AccessToken, TokenType: "Bearer",
 	})
 }
 
@@ -88,13 +74,12 @@ func (h *AuthHandler) Me(c *echo.Context) error {
 		return c.JSON(http.StatusUnauthorized, map[string]string{"error": "unauthorized"})
 	}
 
-	user, err := h.getUserInteractor.Execute(c.Request().Context(), userID)
+	output, err := h.getUser.Execute(c.Request().Context(), dtos.GetUserInput{UserID: userID})
 	if err != nil {
 		if errors.Is(err, shared.ErrUserNotFound) {
 			return c.JSON(http.StatusUnauthorized, map[string]string{"error": "unauthorized"})
 		}
 		return c.JSON(http.StatusInternalServerError, map[string]string{"error": "failed to get user"})
 	}
-
-	return c.JSON(http.StatusOK, presenters.ToUserResponse(user))
+	return c.JSON(http.StatusOK, presenters.ToUserResponse(output.User))
 }
