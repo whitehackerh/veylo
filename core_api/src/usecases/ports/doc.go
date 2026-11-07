@@ -1,2 +1,2 @@
-// Package ports contains shared boundary contracts between application layers.
+// Package ports defines the input interfaces exposed by use cases.
 package ports
