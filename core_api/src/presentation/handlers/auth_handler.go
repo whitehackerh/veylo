@@ -41,7 +41,10 @@ func (h *AuthHandler) Register(c *echo.Context) error {
 		return c.JSON(http.StatusBadRequest, map[string]string{"error": "invalid request body"})
 	}
 
-	user, err := h.registerUserInteractor.Execute(c.Request().Context(), request.Email, request.Password)
+	user, err := h.registerUserInteractor.Execute(c.Request().Context(), dtos.RegisterUserInput{
+		Email:    request.Email,
+		Password: request.Password,
+	})
 	if err != nil {
 		if errors.Is(err, shared.ErrEmailAlreadyExists) {
 			return c.JSON(http.StatusConflict, map[string]string{"error": "email already exists"})
