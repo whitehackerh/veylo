@@ -10,6 +10,7 @@ import (
 
 	"github.com/whitehackerh/veylo/api_server/src/domain"
 	"github.com/whitehackerh/veylo/api_server/src/usecases/dtos"
+	"github.com/whitehackerh/veylo/api_server/src/usecases/ports"
 	"github.com/whitehackerh/veylo/api_server/src/usecases/repositories"
 	"github.com/whitehackerh/veylo/api_server/src/usecases/shared"
 )
@@ -34,14 +35,12 @@ func (i *RegisterUserInteractor) Execute(ctx context.Context, input dtos.Registe
 		return nil, err
 	}
 
-	user := &domain.User{
-		ID:           uuid.NewString(),
-		Email:        email,
-		PasswordHash: string(passwordHash),
-	}
+	user := &domain.User{ID: uuid.NewString(), Email: email, PasswordHash: string(passwordHash)}
 	if err := i.userRepository.Create(ctx, user); err != nil {
 		return nil, err
 	}
 
 	return &dtos.RegisterUserOutput{User: user}, nil
 }
+
+var _ ports.RegisterUser = (*RegisterUserInteractor)(nil)
