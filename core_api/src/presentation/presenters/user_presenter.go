@@ -3,7 +3,7 @@ package presenters
 import (
 	"time"
 
-	"github.com/whitehackerh/veylo/api_server/src/domain"
+	"github.com/whitehackerh/veylo/api_server/src/domain/entities"
 )
 
 type UserResponse struct {
@@ -18,7 +18,7 @@ type LoginResponse struct {
 	TokenType   string       `json:"token_type"`
 }
 
-func ToUserResponse(user *domain.User) UserResponse {
+func ToUserResponse(user *entities.User) UserResponse {
 	return UserResponse{
 		ID: user.ID, Email: user.Email,
 		CreatedAt: user.CreatedAt.UTC().Format(time.RFC3339),
