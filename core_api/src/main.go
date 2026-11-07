@@ -7,10 +7,10 @@ import (
 	"time"
 
 	"github.com/jackc/pgx/v5/pgxpool"
-	"github.com/labstack/echo/v5"
 
-	"github.com/whitehackerh/veylo/api_server/src/infrastructure/repositories/postgres"
+	"github.com/whitehackerh/veylo/api_server/src/infrastructure/persistence/postgres"
 	"github.com/whitehackerh/veylo/api_server/src/infrastructure/security"
+	"github.com/whitehackerh/veylo/api_server/src/presentation"
 	"github.com/whitehackerh/veylo/api_server/src/presentation/handlers"
 	"github.com/whitehackerh/veylo/api_server/src/usecases/interactors"
 )
@@ -40,19 +40,11 @@ func main() {
 	getUserInteractor := interactors.NewGetUserInteractor(userRepository)
 	authHandler := handlers.NewAuthHandler(registerUserInteractor, loginInteractor, getUserInteractor)
 
-	e := echo.New()
-	e.GET("/api/health", func(c *echo.Context) error {
-		return c.JSON(200, map[string]string{"status": "ok"})
-	})
-	e.POST("/api/auth/register", authHandler.Register)
-	e.POST("/api/auth/login", authHandler.Login)
-	e.GET("/api/users/me", authHandler.Me, handlers.AuthMiddleware(tokenManager))
-
+	e := presentation.NewRouter(authHandler, tokenManager)
 	port := os.Getenv("API_PORT")
 	if port == "" {
 		port = "8080"
 	}
-
 	log.Printf("API server listening on :%s", port)
 	log.Fatal(e.Start(":" + port))
 }
