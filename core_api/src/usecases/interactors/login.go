@@ -6,7 +6,6 @@ import (
 
 	"golang.org/x/crypto/bcrypt"
 
-	"github.com/whitehackerh/veylo/api_server/src/entities"
 	"github.com/whitehackerh/veylo/api_server/src/usecases/dtos"
 	"github.com/whitehackerh/veylo/api_server/src/usecases/repositories"
 	"github.com/whitehackerh/veylo/api_server/src/usecases/security"
