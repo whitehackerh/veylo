@@ -6,6 +6,6 @@ import (
 	"github.com/whitehackerh/veylo/api_server/src/usecases/dtos"
 )
 
-type Login interface {
+type LoginUseCase interface {
 	Execute(ctx context.Context, input dtos.LoginInput) (*dtos.LoginOutput, error)
 }
