@@ -1,2 +1,3 @@
-// Package gateways contains interfaces for external service gateways used by use cases.
+// Package gateways defines interfaces for external APIs and services.
+// It is intentionally empty until an external gateway is required.
 package gateways
