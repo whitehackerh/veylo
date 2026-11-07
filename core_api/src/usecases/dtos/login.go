@@ -1,6 +1,6 @@
 package dtos
 
-import "github.com/whitehackerh/veylo/api_server/src/domain"
+import "github.com/whitehackerh/veylo/api_server/src/domain/entities"
 
 type LoginInput struct {
 	Email    string
@@ -8,6 +8,6 @@ type LoginInput struct {
 }
 
 type LoginOutput struct {
-	User        *domain.User
+	User        *entities.User
 	AccessToken string
 }
