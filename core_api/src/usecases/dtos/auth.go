@@ -1,5 +1,7 @@
 package dtos
 
+import "github.com/whitehackerh/veylo/api_server/src/entities"
+
 type RegisterUserInput struct {
 	Email    string
 	Password string
@@ -11,6 +13,6 @@ type LoginInput struct {
 }
 
 type LoginOutput struct {
-	User        interface{}
+	User        *entities.User
 	AccessToken string
 }
