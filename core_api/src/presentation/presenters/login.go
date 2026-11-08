@@ -9,7 +9,7 @@ import (
 
 func ToLoginResponse(output *dtos.LoginOutput) openapi.LoginResponse {
 	return openapi.LoginResponse{
-		User: openapi.UserResponse{
+		User: openapi.User{
 			ID: output.User.ID,
 			Email: output.User.Email,
 			CreatedAt: output.User.CreatedAt.UTC().Truncate(time.Second),
