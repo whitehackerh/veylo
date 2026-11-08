@@ -4,7 +4,6 @@ import (
 	"context"
 
 	"github.com/whitehackerh/veylo/api_server/src/usecases/dtos"
-	"github.com/whitehackerh/veylo/api_server/src/usecases/ports"
 	"github.com/whitehackerh/veylo/api_server/src/usecases/repositories"
 )
 
@@ -23,5 +22,3 @@ func (i *GetUserInteractor) Execute(ctx context.Context, input dtos.GetUserInput
 	}
 	return &dtos.GetUserOutput{User: user}, nil
 }
-
-var _ ports.GetUserUseCase = (*GetUserInteractor)(nil)

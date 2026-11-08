@@ -10,7 +10,6 @@ import (
 
 	"github.com/whitehackerh/veylo/api_server/src/domain/entities"
 	"github.com/whitehackerh/veylo/api_server/src/usecases/dtos"
-	"github.com/whitehackerh/veylo/api_server/src/usecases/ports"
 	"github.com/whitehackerh/veylo/api_server/src/usecases/repositories"
 	"github.com/whitehackerh/veylo/api_server/src/usecases/shared"
 )
@@ -42,5 +41,3 @@ func (i *RegisterUserInteractor) Execute(ctx context.Context, input dtos.Registe
 
 	return &dtos.RegisterUserOutput{User: user}, nil
 }
-
-var _ ports.RegisterUserUseCase = (*RegisterUserInteractor)(nil)

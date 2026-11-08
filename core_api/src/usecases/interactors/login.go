@@ -7,7 +7,6 @@ import (
 	"golang.org/x/crypto/bcrypt"
 
 	"github.com/whitehackerh/veylo/api_server/src/usecases/dtos"
-	"github.com/whitehackerh/veylo/api_server/src/usecases/ports"
 	"github.com/whitehackerh/veylo/api_server/src/usecases/repositories"
 	"github.com/whitehackerh/veylo/api_server/src/usecases/security"
 	"github.com/whitehackerh/veylo/api_server/src/usecases/shared"
@@ -39,5 +38,3 @@ func (i *LoginInteractor) Execute(ctx context.Context, input dtos.LoginInput) (*
 
 	return &dtos.LoginOutput{User: user, AccessToken: accessToken}, nil
 }
-
-var _ ports.LoginUseCase = (*LoginInteractor)(nil)
