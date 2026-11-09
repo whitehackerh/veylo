@@ -14,7 +14,14 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/HealthResponse"
+                allOf:
+                  - $ref: "#/components/schemas/ApiResponse"
+                  - type: object
+                    properties:
+                      data:
+                        $ref: "#/components/schemas/HealthResponse"
+                      error:
+                        type: "null"
   /auth/register:
     post:
       operationId: registerUser
@@ -30,19 +37,26 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/CommonResponse"
+                allOf:
+                  - $ref: "#/components/schemas/ApiResponse"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                      error:
+                        type: "null"
         "400":
           description: Invalid request
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ErrorResponse"
+                $ref: "#/components/schemas/ApiResponse"
         "409":
           description: Email already exists
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ErrorResponse"
+                $ref: "#/components/schemas/ApiResponse"
   /auth/login:
     post:
       operationId: login
@@ -54,7 +68,7 @@ paths:
               $ref: "#/components/schemas/LoginRequest"
       responses:
         "200":
-          description: Authenticated
+          description: Authenticated. Token returned in Authorization header.
           headers:
             Authorization:
               description: Bearer access token
@@ -63,13 +77,20 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/LoginResponse"
+                allOf:
+                  - $ref: "#/components/schemas/ApiResponse"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                      error:
+                        type: "null"
         "401":
           description: Invalid credentials
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ErrorResponse"
+                $ref: "#/components/schemas/ApiResponse"
   /users/me:
     get:
       operationId: getCurrentUser
@@ -81,13 +102,20 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/GetUserResponse"
+                allOf:
+                  - $ref: "#/components/schemas/ApiResponse"
+                  - type: object
+                    properties:
+                      data:
+                        $ref: "#/components/schemas/User"
+                      error:
+                        type: "null"
         "401":
           description: Unauthorized
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ErrorResponse"
+                $ref: "#/components/schemas/ApiResponse"
 components:
   securitySchemes:
     bearerAuth:
@@ -145,60 +173,32 @@ components:
           type: string
         message:
           type: string
-    CommonResponse:
+    ApiResponse:
       type: object
       required:
         - time_stamp
         - path
-        - errors
+        - data
+        - error
       properties:
         time_stamp:
           type: string
           format: date-time
         path:
           type: string
-        errors:
-          type: array
-          items:
-            $ref: "#/components/schemas/ApiError"
-    GetUserResponse:
-      allOf:
-        - $ref: "#/components/schemas/CommonResponse"
-        - type: object
-          required:
-            - data
-          properties:
-            data:
-              $ref: "#/components/schemas/User"
+        data:
+          oneOf:
+            - type: array
+            - type: object
+            - type: "null"
+        error:
+          oneOf:
+            - $ref: "#/components/schemas/ApiError"
+            - type: "null"
     HealthResponse:
-      allOf:
-        - $ref: "#/components/schemas/CommonResponse"
-        - type: object
-          required:
-            - data
-          properties:
-            data:
-              type: object
-              required:
-                - status
-              properties:
-                status:
-                  type: string
-    LoginResponse:
-      allOf:
-        - $ref: "#/components/schemas/CommonResponse"
-        - type: object
-          required:
-            - data
-          properties:
-            data:
-              type: object
-              additionalProperties: false
-    ErrorResponse:
-      allOf:
-        - $ref: "#/components/schemas/CommonResponse"
-        - type: object
-          properties:
-            data:
-              type: object
-              nullable: true
+      type: object
+      required:
+        - status
+      properties:
+        status:
+          type: string
