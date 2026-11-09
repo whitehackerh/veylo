@@ -22,6 +22,8 @@ paths:
                         $ref: "#/components/schemas/HealthResponse"
                       error:
                         type: "null"
+        "500":
+          $ref: "#/components/responses/ErrorInternalServer"
   /auth/register:
     post:
       operationId: registerUser
@@ -46,17 +48,11 @@ paths:
                       error:
                         type: "null"
         "400":
-          description: Invalid request
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ApiResponse"
+          $ref: "#/components/responses/ErrorBadRequest"
         "409":
-          description: Email already exists
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ApiResponse"
+          $ref: "#/components/responses/ErrorConflict"
+        "500":
+          $ref: "#/components/responses/ErrorInternalServer"
   /auth/login:
     post:
       operationId: login
@@ -85,12 +81,12 @@ paths:
                         type: object
                       error:
                         type: "null"
+        "400":
+          $ref: "#/components/responses/ErrorBadRequest"
         "401":
-          description: Invalid credentials
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ApiResponse"
+          $ref: "#/components/responses/ErrorUnauthorized"
+        "500":
+          $ref: "#/components/responses/ErrorInternalServer"
   /users/me:
     get:
       operationId: getCurrentUser
@@ -111,11 +107,9 @@ paths:
                       error:
                         type: "null"
         "401":
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ApiResponse"
+          $ref: "#/components/responses/ErrorUnauthorized"
+        "500":
+          $ref: "#/components/responses/ErrorInternalServer"
 components:
   securitySchemes:
     bearerAuth:
@@ -202,3 +196,35 @@ components:
       properties:
         status:
           type: string
+
+  responses:
+    ErrorBadRequest:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ApiResponse"
+    ErrorUnauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ApiResponse"
+    ErrorConflict:
+      description: Conflict
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ApiResponse"
+    ErrorNotFound:
+      description: Not Found
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ApiResponse"
+    ErrorInternalServer:
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ApiResponse"
