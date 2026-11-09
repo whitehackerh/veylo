@@ -14,7 +14,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/HealthResponse"
+                $ref: "#/components/schemas/ApiResponse"
   /auth/register:
     post:
       operationId: registerUser
@@ -30,19 +30,19 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/User"
+                $ref: "#/components/schemas/ApiResponse"
         "400":
           description: Invalid request
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ErrorResponse"
+                $ref: "#/components/schemas/ApiResponse"
         "409":
           description: Email already exists
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ErrorResponse"
+                $ref: "#/components/schemas/ApiResponse"
   /auth/login:
     post:
       operationId: login
@@ -58,13 +58,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/LoginResponse"
+                $ref: "#/components/schemas/ApiResponse"
         "401":
           description: Invalid credentials
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ErrorResponse"
+                $ref: "#/components/schemas/ApiResponse"
   /users/me:
     get:
       operationId: getCurrentUser
@@ -76,13 +76,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/User"
+                $ref: "#/components/schemas/ApiResponse"
         "401":
           description: Unauthorized
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ErrorResponse"
+                $ref: "#/components/schemas/ApiResponse"
 components:
   securitySchemes:
     bearerAuth:
@@ -114,48 +114,34 @@ components:
           format: email
         password:
           type: string
-    User:
+    ApiError:
       type: object
       required:
-        - id
-        - email
-        - created_at
+        - code
+        - message
       properties:
-        id:
+        code:
           type: string
-          format: uuid
-        email:
+        message:
           type: string
-          format: email
-        created_at:
+    ApiResponse:
+      type: object
+      required:
+        - data
+        - time_stamp
+        - path
+        - errors
+      properties:
+        data:
+          type: object
+          nullable: true
+          additionalProperties: true
+        time_stamp:
           type: string
           format: date-time
-    LoginResponse:
-      type: object
-      required:
-        - user
-        - access_token
-        - token_type
-      properties:
-        user:
-          $ref: "#/components/schemas/User"
-        access_token:
+        path:
           type: string
-        token_type:
-          type: string
-          enum:
-            - Bearer
-    HealthResponse:
-      type: object
-      required:
-        - status
-      properties:
-        status:
-          type: string
-    ErrorResponse:
-      type: object
-      required:
-        - error
-      properties:
-        error:
-          type: string
+        errors:
+          type: array
+          items:
+            $ref: "#/components/schemas/ApiError"
