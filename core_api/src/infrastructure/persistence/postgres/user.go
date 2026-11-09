@@ -6,22 +6,21 @@ import (
 
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgconn"
-	"github.com/jackc/pgx/v5/pgxpool"
 
 	"github.com/whitehackerh/veylo/api_server/src/domain/entities"
 	"github.com/whitehackerh/veylo/api_server/src/usecases/shared"
 )
 
 type UserRepository struct {
-	pool *pgxpool.Pool
+	db DBTX
 }
 
-func NewUserRepository(pool *pgxpool.Pool) *UserRepository {
-	return &UserRepository{pool: pool}
+func NewUserRepository(db DBTX) *UserRepository {
+	return &UserRepository{db: db}
 }
 
 func (r *UserRepository) Create(ctx context.Context, user *entities.User) error {
-	err := r.pool.QueryRow(ctx,
+	err := r.db.QueryRow(ctx,
 		`INSERT INTO users (id, email, password_hash)
 		 VALUES ($1, $2, $3)
 		 RETURNING created_at`,
@@ -47,7 +46,7 @@ func (r *UserRepository) FindByID(ctx context.Context, id string) (*entities.Use
 
 func (r *UserRepository) findOne(ctx context.Context, query string, arg string) (*entities.User, error) {
 	user := &entities.User{}
-	err := r.pool.QueryRow(ctx, query, arg).Scan(&user.ID, &user.Email, &user.PasswordHash, &user.CreatedAt)
+	err := r.db.QueryRow(ctx, query, arg).Scan(&user.ID, &user.Email, &user.PasswordHash, &user.CreatedAt)
 	if errors.Is(err, pgx.ErrNoRows) {
 		return nil, shared.ErrUserNotFound
 	}
