@@ -1,5 +1,5 @@
 package presenters
 
-func ToLoginData() struct{} {
+func ToLoginResponse() struct{} {
 	return struct{}{}
 }
