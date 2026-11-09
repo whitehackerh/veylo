@@ -3,12 +3,16 @@ package openapi
 
 import "time"
 
-type ErrorResponse struct {
-	Error string `json:"error"`
+type ApiError struct {
+	Code    string `json:"code"`
+	Message string `json:"message"`
 }
 
-type HealthResponse struct {
-	Status string `json:"status"`
+type ApiResponse struct {
+	Data      map[string]interface{} `json:"data"`
+	TimeStamp time.Time               `json:"time_stamp"`
+	Path      string                  `json:"path"`
+	Errors    []ApiError              `json:"errors"`
 }
 
 type LoginRequest struct {
@@ -16,19 +20,7 @@ type LoginRequest struct {
 	Password string `json:"password"`
 }
 
-type LoginResponse struct {
-	User        User `json:"user"`
-	AccessToken string       `json:"access_token"`
-	TokenType   string       `json:"token_type"`
-}
-
 type RegisterUserRequest struct {
 	Email    string `json:"email"`
 	Password string `json:"password"`
-}
-
-type User struct {
-	ID        string    `json:"id"`
-	Email     string    `json:"email"`
-	CreatedAt time.Time `json:"created_at"`
 }
