@@ -8,7 +8,7 @@ import (
 	"github.com/whitehackerh/veylo/api_server/src/presentation/openapi"
 )
 
-func newApiResponse(c *echo.Context, data interface{}, apiError *openapi.ApiError) openapi.ApiResponse {
+func newAPIResponse(c *echo.Context, data interface{}, apiError *openapi.ApiError) openapi.ApiResponse {
 	return openapi.ApiResponse{
 		TimeStamp: time.Now().UTC(),
 		Path:      c.Request().URL.Path,
@@ -18,7 +18,7 @@ func newApiResponse(c *echo.Context, data interface{}, apiError *openapi.ApiErro
 }
 
 func newErrorResponse(c *echo.Context, code string, message string) openapi.ApiResponse {
-	return newApiResponse(c, nil, &openapi.ApiError{
+	return newAPIResponse(c, nil, &openapi.ApiError{
 		Code:    code,
 		Message: message,
 	})
