@@ -7,6 +7,7 @@ import (
 	"github.com/labstack/echo/v5"
 
 	"github.com/whitehackerh/veylo/api_server/src/presentation/openapi"
+	"github.com/whitehackerh/veylo/api_server/src/presentation/presenters"
 	"github.com/whitehackerh/veylo/api_server/src/usecases/dtos"
 	"github.com/whitehackerh/veylo/api_server/src/usecases/ports"
 	"github.com/whitehackerh/veylo/api_server/src/usecases/shared"
@@ -38,5 +39,5 @@ func (h *LoginHandler) Handle(c *echo.Context) error {
 	}
 
 	c.Response().Header().Set("Authorization", "Bearer "+output.AccessToken)
-	return c.JSON(http.StatusOK, newAPIResponse(c, presenters.ToLoginData(), nil))
+	return c.JSON(http.StatusOK, newAPIResponse(c, presenters.ToLoginResponse(), nil))
 }
