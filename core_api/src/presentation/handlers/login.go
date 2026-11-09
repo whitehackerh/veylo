@@ -24,7 +24,7 @@ func NewLoginHandler(loginUseCase ports.LoginUseCase) *LoginHandler {
 func (h *LoginHandler) Handle(c *echo.Context) error {
 	request := new(openapi.LoginRequest)
 	if err := c.Bind(request); err != nil {
-		return c.JSON(http.StatusBadRequest, newErrorResponse(c, "INVALID_REQUEST", "invalid request body"))
+		return c.JSON(http.StatusBadRequest, presenters.ToErrorResponse(c.Request().URL.Path, "INVALID_REQUEST", "invalid request body"))
 	}
 
 	output, err := h.loginUseCase.Execute(c.Request().Context(), dtos.LoginInput{
@@ -33,11 +33,11 @@ func (h *LoginHandler) Handle(c *echo.Context) error {
 	})
 	if err != nil {
 		if errors.Is(err, shared.ErrInvalidCredentials) {
-			return c.JSON(http.StatusUnauthorized, newErrorResponse(c, "INVALID_CREDENTIALS", "invalid email or password"))
+			return c.JSON(http.StatusUnauthorized, presenters.ToErrorResponse(c.Request().URL.Path, "INVALID_CREDENTIALS", "invalid email or password"))
 		}
-		return c.JSON(http.StatusInternalServerError, newErrorResponse(c, "INTERNAL_SERVER_ERROR", "failed to login"))
+		return c.JSON(http.StatusInternalServerError, presenters.ToErrorResponse(c.Request().URL.Path, "INTERNAL_SERVER_ERROR", "failed to login"))
 	}
 
 	c.Response().Header().Set("Authorization", "Bearer "+output.AccessToken)
-	return c.JSON(http.StatusOK, newAPIResponse(c, presenters.ToLoginResponse(), nil))
+	return c.JSON(http.StatusOK, presenters.ToAPIResponse(c.Request().URL.Path, presenters.ToLoginResponse(), nil))
 }
