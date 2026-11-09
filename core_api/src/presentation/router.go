@@ -22,7 +22,7 @@ func RegisterRoutes(
 	api := e.Group("/api")
 
 	api.GET("/health", func(c *echo.Context) error {
-		return c.JSON(http.StatusOK, newApiResponse(c, presenters.ToHealthResponse(), nil))
+		return c.JSON(http.StatusOK, newAPIResponse(c, presenters.ToHealthData(), nil))
 	})
 	api.POST("/auth/register", registerUserHandler.Handle)
 	api.POST("/auth/login", loginHandler.Handle)
