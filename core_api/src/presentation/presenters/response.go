@@ -1,0 +1,23 @@
+package presenters
+
+import (
+	"time"
+
+	"github.com/whitehackerh/veylo/api_server/src/generated/openapi"
+)
+
+func ToAPIResponse(path string, data interface{}, apiError *openapi.ApiError) openapi.ApiResponse {
+	return openapi.ApiResponse{
+		TimeStamp: time.Now().UTC(),
+		Path:      path,
+		Data:      data,
+		Error:     apiError,
+	}
+}
+
+func ToErrorResponse(path string, code string, message string) openapi.ApiResponse {
+	return ToAPIResponse(path, nil, &openapi.ApiError{
+		Code:    code,
+		Message: message,
+	})
+}
