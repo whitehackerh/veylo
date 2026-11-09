@@ -24,19 +24,19 @@ func NewLoginHandler(loginUseCase ports.LoginUseCase) *LoginHandler {
 func (h *LoginHandler) Handle(c *echo.Context) error {
 	request := new(openapi.LoginRequest)
 	if err := c.Bind(request); err != nil {
-		return c.JSON(http.StatusBadRequest, openapi.ErrorResponse{Error: "invalid request body"})
+		return c.JSON(http.StatusBadRequest, presenters.ToErrorResponse(c.Request().URL.Path, "INVALID_REQUEST", "invalid request body"))
 	}
 
 	output, err := h.loginUseCase.Execute(c.Request().Context(), dtos.LoginInput{
-		Email: request.Email,
+		Email:    request.Email,
 		Password: request.Password,
 	})
 	if err != nil {
 		if errors.Is(err, shared.ErrInvalidCredentials) {
-			return c.JSON(http.StatusUnauthorized, openapi.ErrorResponse{Error: "invalid email or password"})
+			return c.JSON(http.StatusUnauthorized, presenters.ToErrorResponse(c.Request().URL.Path, "INVALID_CREDENTIALS", "invalid email or password"))
 		}
-		return c.JSON(http.StatusInternalServerError, openapi.ErrorResponse{Error: "failed to login"})
+		return c.JSON(http.StatusInternalServerError, presenters.ToErrorResponse(c.Request().URL.Path, "INTERNAL_SERVER_ERROR", "failed to login"))
 	}
 
-	return c.JSON(http.StatusOK, presenters.ToLoginResponse(output))
+	return c.JSON(http.StatusOK, presenters.ToResponse(presenters.ToLoginData(output), c.Request().URL.Path))
 }
