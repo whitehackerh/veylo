@@ -26,11 +26,11 @@ paths:
               $ref: "#/components/schemas/RegisterUserRequest"
       responses:
         "201":
-          description: Registered user
+          description: User registered successfully. Sign in to obtain an access token.
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/RegisterUserResponse"
+                $ref: "#/components/schemas/CommonResponse"
         "400":
           description: Invalid request
           content:
@@ -135,13 +135,6 @@ components:
         created_at:
           type: string
           format: date-time
-    HealthData:
-      type: object
-      required:
-        - status
-      properties:
-        status:
-          type: string
     ApiError:
       type: object
       required:
@@ -168,15 +161,6 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/ApiError"
-    RegisterUserResponse:
-      allOf:
-        - $ref: "#/components/schemas/CommonResponse"
-        - type: object
-          required:
-            - data
-          properties:
-            data:
-              $ref: "#/components/schemas/User"
     GetUserResponse:
       allOf:
         - $ref: "#/components/schemas/CommonResponse"
@@ -194,7 +178,12 @@ components:
             - data
           properties:
             data:
-              $ref: "#/components/schemas/HealthData"
+              type: object
+              required:
+                - status
+              properties:
+                status:
+                  type: string
     LoginResponse:
       allOf:
         - $ref: "#/components/schemas/CommonResponse"
@@ -209,8 +198,6 @@ components:
       allOf:
         - $ref: "#/components/schemas/CommonResponse"
         - type: object
-          required:
-            - data
           properties:
             data:
               type: object
