@@ -41,5 +41,5 @@ func (h *RegisterUserHandler) Handle(c *echo.Context) error {
 		return c.JSON(http.StatusInternalServerError, newErrorResponse(c, "INTERNAL_SERVER_ERROR", "failed to register user"))
 	}
 
-	return c.JSON(http.StatusCreated, newApiResponse(c, presenters.ToRegisterUserResponse(), nil))
+	return c.JSON(http.StatusCreated, newAPIResponse(c, presenters.ToRegisterUserData(), nil))
 }
