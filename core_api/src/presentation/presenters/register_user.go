@@ -1,5 +1,5 @@
 package presenters
 
-func ToRegisterUserData() struct{} {
+func ToRegisterUserResponse() struct{} {
 	return struct{}{}
 }
