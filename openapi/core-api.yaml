@@ -3,9 +3,9 @@ info:
   title: Veylo Core API
   version: 1.0.0
 servers:
-  - url: http://localhost:8080
+  - url: http://localhost:8080/api
 paths:
-  /api/health:
+  /health:
     get:
       operationId: getHealth
       responses:
@@ -15,7 +15,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/HealthResponse"
-  /api/auth/register:
+  /auth/register:
     post:
       operationId: registerUser
       requestBody:
@@ -43,7 +43,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-  /api/auth/login:
+  /auth/login:
     post:
       operationId: login
       requestBody:
@@ -65,7 +65,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-  /api/users/me:
+  /users/me:
     get:
       operationId: getCurrentUser
       security:

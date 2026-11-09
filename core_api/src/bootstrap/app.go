@@ -45,10 +45,10 @@ func NewApp(ctx context.Context) (*App, error) {
 
 	registerUserHandler := handlers.NewRegisterUserHandler(registerUserUseCase)
 	loginHandler := handlers.NewLoginHandler(loginUseCase)
-	getUserHandler := handlers.NewGetUserHandler(getUserUseCase)
+	getUserHandler := handlers.NewGetUserHandler()
 
 	server := echo.New()
-	presentation.RegisterRoutes(server, registerUserHandler, loginHandler, getUserHandler, tokenManager)
+	presentation.RegisterRoutes(server, registerUserHandler, loginHandler, getUserHandler, tokenManager, getUserUseCase)
 
 	return &App{Server: server, Pool: pool}, nil
 }

@@ -9,7 +9,6 @@ import (
 	"github.com/jackc/pgx/v5/pgxpool"
 
 	"github.com/whitehackerh/veylo/api_server/src/domain/entities"
-	"github.com/whitehackerh/veylo/api_server/src/usecases/repositories"
 	"github.com/whitehackerh/veylo/api_server/src/usecases/shared"
 )
 
@@ -57,5 +56,3 @@ func (r *UserRepository) findOne(ctx context.Context, query string, arg string) 
 	}
 	return user, nil
 }
-
-var _ repositories.UserRepository = (*UserRepository)(nil)
