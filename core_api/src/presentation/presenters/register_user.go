@@ -7,10 +7,13 @@ import (
 	"github.com/whitehackerh/veylo/api_server/src/usecases/dtos"
 )
 
-func ToRegisterUserData(output *dtos.RegisterUserOutput) openapi.User {
-	return openapi.User{
-		ID:        output.ID.String(),
-		Email:     output.Email,
-		CreatedAt: output.CreatedAt.UTC().Truncate(time.Second),
+func ToRegisterUserResponse(output *dtos.RegisterUserOutput, path string) openapi.RegisterUserResponse {
+	return openapi.RegisterUserResponse{
+		Data: openapi.User{
+			ID:        output.ID.String(),
+			Email:     output.Email,
+			CreatedAt: output.CreatedAt.UTC().Truncate(time.Second),
+		},
+		CommonResponse: ToCommonResponse(path),
 	}
 }
