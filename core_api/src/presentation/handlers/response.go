@@ -5,7 +5,7 @@ import (
 
 	"github.com/labstack/echo/v5"
 
-	"github.com/whitehackerh/veylo/api_server/src/presentation/openapi"
+	"github.com/whitehackerh/veylo/api_server/src/generated/openapi"
 )
 
 func newAPIResponse(c *echo.Context, data interface{}, apiError *openapi.ApiError) openapi.ApiResponse {
