@@ -6,6 +6,7 @@ import (
 	"github.com/labstack/echo/v5"
 
 	"github.com/whitehackerh/veylo/api_server/src/presentation/handlers"
+	"github.com/whitehackerh/veylo/api_server/src/presentation/openapi"
 	"github.com/whitehackerh/veylo/api_server/src/presentation/presenters"
 	"github.com/whitehackerh/veylo/api_server/src/usecases/ports"
 	"github.com/whitehackerh/veylo/api_server/src/usecases/security"
@@ -22,7 +23,10 @@ func RegisterRoutes(
 	api := e.Group("/api")
 
 	api.GET("/health", func(c *echo.Context) error {
-		return c.JSON(http.StatusOK, presenters.ToResponse(map[string]interface{}{"status": "ok"}, c.Request().URL.Path))
+		return c.JSON(http.StatusOK, openapi.HealthResponse{
+			Data:            openapi.HealthData{Status: "ok"},
+			CommonResponse: presenters.ToCommonResponse(c.Request().URL.Path),
+		})
 	})
 	api.POST("/auth/register", registerUserHandler.Handle)
 	api.POST("/auth/login", loginHandler.Handle)
