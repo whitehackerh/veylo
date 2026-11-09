@@ -14,7 +14,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ApiResponse"
+                $ref: "#/components/schemas/HealthResponse"
   /auth/register:
     post:
       operationId: registerUser
@@ -30,19 +30,19 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ApiResponse"
+                $ref: "#/components/schemas/RegisterUserResponse"
         "400":
           description: Invalid request
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ApiResponse"
+                $ref: "#/components/schemas/ErrorResponse"
         "409":
           description: Email already exists
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ApiResponse"
+                $ref: "#/components/schemas/ErrorResponse"
   /auth/login:
     post:
       operationId: login
@@ -55,16 +55,21 @@ paths:
       responses:
         "200":
           description: Authenticated
+          headers:
+            Authorization:
+              description: Bearer access token
+              schema:
+                type: string
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ApiResponse"
+                $ref: "#/components/schemas/LoginResponse"
         "401":
           description: Invalid credentials
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ApiResponse"
+                $ref: "#/components/schemas/ErrorResponse"
   /users/me:
     get:
       operationId: getCurrentUser
@@ -76,13 +81,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ApiResponse"
+                $ref: "#/components/schemas/GetUserResponse"
         "401":
           description: Unauthorized
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ApiResponse"
+                $ref: "#/components/schemas/ErrorResponse"
 components:
   securitySchemes:
     bearerAuth:
@@ -130,21 +135,6 @@ components:
         created_at:
           type: string
           format: date-time
-    LoginData:
-      type: object
-      required:
-        - user
-        - access_token
-        - token_type
-      properties:
-        user:
-          $ref: "#/components/schemas/User"
-        access_token:
-          type: string
-        token_type:
-          type: string
-          enum:
-            - Bearer
     HealthData:
       type: object
       required:
@@ -162,20 +152,13 @@ components:
           type: string
         message:
           type: string
-    ApiResponse:
+    CommonResponse:
       type: object
       required:
-        - data
         - time_stamp
         - path
         - errors
       properties:
-        data:
-          nullable: true
-          oneOf:
-            - $ref: "#/components/schemas/User"
-            - $ref: "#/components/schemas/LoginData"
-            - $ref: "#/components/schemas/HealthData"
         time_stamp:
           type: string
           format: date-time
@@ -185,3 +168,50 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/ApiError"
+    RegisterUserResponse:
+      allOf:
+        - $ref: "#/components/schemas/CommonResponse"
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              $ref: "#/components/schemas/User"
+    GetUserResponse:
+      allOf:
+        - $ref: "#/components/schemas/CommonResponse"
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              $ref: "#/components/schemas/User"
+    HealthResponse:
+      allOf:
+        - $ref: "#/components/schemas/CommonResponse"
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              $ref: "#/components/schemas/HealthData"
+    LoginResponse:
+      allOf:
+        - $ref: "#/components/schemas/CommonResponse"
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              type: object
+              additionalProperties: false
+    ErrorResponse:
+      allOf:
+        - $ref: "#/components/schemas/CommonResponse"
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              type: object
+              nullable: true
