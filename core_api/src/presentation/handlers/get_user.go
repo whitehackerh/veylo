@@ -18,8 +18,8 @@ func NewGetUserHandler() *GetUserHandler {
 func (h *GetUserHandler) Handle(c *echo.Context) error {
 	output, ok := c.Get("user").(*dtos.GetUserOutput)
 	if !ok {
-		return c.JSON(http.StatusUnauthorized, presenters.ToErrorResponse(c.Request().URL.Path, "UNAUTHORIZED", "unauthorized"))
+		return c.JSON(http.StatusUnauthorized, newErrorResponse(c, "UNAUTHORIZED", "unauthorized"))
 	}
 
-	return c.JSON(http.StatusOK, presenters.ToGetUserResponse(output, c.Request().URL.Path))
+	return c.JSON(http.StatusOK, newApiResponse(c, presenters.ToGetUserResponse(output), nil))
 }
