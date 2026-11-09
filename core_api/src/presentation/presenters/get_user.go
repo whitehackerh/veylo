@@ -7,7 +7,7 @@ import (
 	"github.com/whitehackerh/veylo/api_server/src/usecases/dtos"
 )
 
-func ToGetUserResponse(output *dtos.GetUserOutput) openapi.User {
+func ToUserData(output *dtos.GetUserOutput) openapi.User {
 	return openapi.User{
 		ID:        output.ID.String(),
 		Email:     output.Email,
