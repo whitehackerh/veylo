@@ -41,5 +41,5 @@ func (h *RegisterUserHandler) Handle(c *echo.Context) error {
 		return c.JSON(http.StatusInternalServerError, presenters.ToErrorResponse(c.Request().URL.Path, "INTERNAL_SERVER_ERROR", "failed to register user"))
 	}
 
-	return c.JSON(http.StatusCreated, presenters.ToResponse(presenters.ToRegisterUserData(output), c.Request().URL.Path))
+	return c.JSON(http.StatusCreated, presenters.ToRegisterUserResponse(output, c.Request().URL.Path))
 }
