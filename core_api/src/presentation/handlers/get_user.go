@@ -21,5 +21,5 @@ func (h *GetUserHandler) Handle(c *echo.Context) error {
 		return c.JSON(http.StatusUnauthorized, newErrorResponse(c, "UNAUTHORIZED", "unauthorized"))
 	}
 
-	return c.JSON(http.StatusOK, newAPIResponse(c, presenters.ToUserData(output), nil))
+	return c.JSON(http.StatusOK, newAPIResponse(c, presenters.ToGetUserResponse(output), nil))
 }
