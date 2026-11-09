@@ -6,7 +6,7 @@ import (
 
 	"github.com/labstack/echo/v5"
 
-	"github.com/whitehackerh/veylo/api_server/src/presentation/openapi"
+	"github.com/whitehackerh/veylo/api_server/src/generated/openapi"
 	"github.com/whitehackerh/veylo/api_server/src/presentation/presenters"
 	"github.com/whitehackerh/veylo/api_server/src/usecases/dtos"
 	"github.com/whitehackerh/veylo/api_server/src/usecases/ports"
