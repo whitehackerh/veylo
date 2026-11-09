@@ -1,7 +1,7 @@
 package presenters
 
 import (
-	"github.com/whitehackerh/veylo/api_server/src/presentation/openapi"
+	"github.com/whitehackerh/veylo/api_server/src/generated/openapi"
 	"github.com/whitehackerh/veylo/api_server/src/usecases/dtos"
 )
 
