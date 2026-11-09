@@ -1,6 +1,10 @@
 package dtos
 
-import "time"
+import (
+	"time"
+
+	"github.com/google/uuid"
+)
 
 type RegisterUserInput struct {
 	Email    string
@@ -8,7 +12,7 @@ type RegisterUserInput struct {
 }
 
 type RegisterUserOutput struct {
-	ID        string
+	ID        uuid.UUID
 	Email     string
 	CreatedAt time.Time
 }

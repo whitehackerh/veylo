@@ -1,13 +1,17 @@
 package dtos
 
-import "time"
+import (
+	"time"
+
+	"github.com/google/uuid"
+)
 
 type GetUserInput struct {
 	UserID string
 }
 
 type GetUserOutput struct {
-	ID        string
+	ID        uuid.UUID
 	Email     string
 	CreatedAt time.Time
 }
