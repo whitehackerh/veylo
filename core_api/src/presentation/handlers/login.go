@@ -7,7 +7,6 @@ import (
 	"github.com/labstack/echo/v5"
 
 	"github.com/whitehackerh/veylo/api_server/src/presentation/openapi"
-	"github.com/whitehackerh/veylo/api_server/src/presentation/presenters"
 	"github.com/whitehackerh/veylo/api_server/src/usecases/dtos"
 	"github.com/whitehackerh/veylo/api_server/src/usecases/ports"
 	"github.com/whitehackerh/veylo/api_server/src/usecases/shared"
@@ -24,7 +23,7 @@ func NewLoginHandler(loginUseCase ports.LoginUseCase) *LoginHandler {
 func (h *LoginHandler) Handle(c *echo.Context) error {
 	request := new(openapi.LoginRequest)
 	if err := c.Bind(request); err != nil {
-		return c.JSON(http.StatusBadRequest, presenters.ToErrorResponse(c.Request().URL.Path, "INVALID_REQUEST", "invalid request body"))
+		return c.JSON(http.StatusBadRequest, newErrorResponse(c, "INVALID_REQUEST", "invalid request body"))
 	}
 
 	output, err := h.loginUseCase.Execute(c.Request().Context(), dtos.LoginInput{
@@ -33,11 +32,11 @@ func (h *LoginHandler) Handle(c *echo.Context) error {
 	})
 	if err != nil {
 		if errors.Is(err, shared.ErrInvalidCredentials) {
-			return c.JSON(http.StatusUnauthorized, presenters.ToErrorResponse(c.Request().URL.Path, "INVALID_CREDENTIALS", "invalid email or password"))
+			return c.JSON(http.StatusUnauthorized, newErrorResponse(c, "INVALID_CREDENTIALS", "invalid email or password"))
 		}
-		return c.JSON(http.StatusInternalServerError, presenters.ToErrorResponse(c.Request().URL.Path, "INTERNAL_SERVER_ERROR", "failed to login"))
+		return c.JSON(http.StatusInternalServerError, newErrorResponse(c, "INTERNAL_SERVER_ERROR", "failed to login"))
 	}
 
 	c.Response().Header().Set("Authorization", "Bearer "+output.AccessToken)
-	return c.JSON(http.StatusOK, presenters.ToLoginResponse(c.Request().URL.Path))
+	return c.JSON(http.StatusOK, newApiResponse(c, presenters.ToLoginResponse(), nil))
 }
