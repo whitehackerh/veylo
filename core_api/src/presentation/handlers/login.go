@@ -38,5 +38,6 @@ func (h *LoginHandler) Handle(c *echo.Context) error {
 		return c.JSON(http.StatusInternalServerError, presenters.ToErrorResponse(c.Request().URL.Path, "INTERNAL_SERVER_ERROR", "failed to login"))
 	}
 
-	return c.JSON(http.StatusOK, presenters.ToResponse(presenters.ToLoginData(output), c.Request().URL.Path))
+	c.Response().Header().Set("Authorization", "Bearer "+output.AccessToken)
+	return c.JSON(http.StatusOK, presenters.ToLoginResponse(c.Request().URL.Path))
 }
