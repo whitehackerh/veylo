@@ -8,21 +8,29 @@ type ApiError struct {
 	Message string `json:"message"`
 }
 
-type ApiResponse struct {
-	Data      interface{} `json:"data"`
-	TimeStamp time.Time   `json:"time_stamp"`
-	Path      string      `json:"path"`
-	Errors    []ApiError  `json:"errors"`
+type CommonResponse struct {
+	TimeStamp time.Time  `json:"time_stamp"`
+	Path      string     `json:"path"`
+	Errors    []ApiError `json:"errors"`
+}
+
+type ErrorResponse struct {
+	Data *struct{} `json:"data"`
+	CommonResponse
+}
+
+type GetUserResponse struct {
+	Data User `json:"data"`
+	CommonResponse
 }
 
 type HealthData struct {
 	Status string `json:"status"`
 }
 
-type LoginData struct {
-	User        User   `json:"user"`
-	AccessToken string `json:"access_token"`
-	TokenType   string `json:"token_type"`
+type HealthResponse struct {
+	Data HealthData `json:"data"`
+	CommonResponse
 }
 
 type LoginRequest struct {
@@ -30,9 +38,19 @@ type LoginRequest struct {
 	Password string `json:"password"`
 }
 
+type LoginResponse struct {
+	Data struct{} `json:"data"`
+	CommonResponse
+}
+
 type RegisterUserRequest struct {
 	Email    string `json:"email"`
 	Password string `json:"password"`
+}
+
+type RegisterUserResponse struct {
+	Data User `json:"data"`
+	CommonResponse
 }
 
 type User struct {
