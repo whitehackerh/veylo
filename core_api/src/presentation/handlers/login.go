@@ -38,5 +38,5 @@ func (h *LoginHandler) Handle(c *echo.Context) error {
 	}
 
 	c.Response().Header().Set("Authorization", "Bearer "+output.AccessToken)
-	return c.JSON(http.StatusOK, newApiResponse(c, presenters.ToLoginResponse(), nil))
+	return c.JSON(http.StatusOK, newAPIResponse(c, presenters.ToLoginData(), nil))
 }
