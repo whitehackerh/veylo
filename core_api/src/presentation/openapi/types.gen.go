@@ -9,10 +9,20 @@ type ApiError struct {
 }
 
 type ApiResponse struct {
-	Data      map[string]interface{} `json:"data"`
-	TimeStamp time.Time               `json:"time_stamp"`
-	Path      string                  `json:"path"`
-	Errors    []ApiError              `json:"errors"`
+	Data      interface{} `json:"data"`
+	TimeStamp time.Time   `json:"time_stamp"`
+	Path      string      `json:"path"`
+	Errors    []ApiError  `json:"errors"`
+}
+
+type HealthData struct {
+	Status string `json:"status"`
+}
+
+type LoginData struct {
+	User        User   `json:"user"`
+	AccessToken string `json:"access_token"`
+	TokenType   string `json:"token_type"`
 }
 
 type LoginRequest struct {
@@ -23,4 +33,10 @@ type LoginRequest struct {
 type RegisterUserRequest struct {
 	Email    string `json:"email"`
 	Password string `json:"password"`
+}
+
+type User struct {
+	ID        string    `json:"id"`
+	Email     string    `json:"email"`
+	CreatedAt time.Time `json:"created_at"`
 }
