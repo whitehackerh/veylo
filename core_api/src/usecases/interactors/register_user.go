@@ -39,5 +39,9 @@ func (i *RegisterUserInteractor) Execute(ctx context.Context, input dtos.Registe
 		return nil, err
 	}
 
-	return &dtos.RegisterUserOutput{User: user}, nil
+	return &dtos.RegisterUserOutput{
+		ID: user.ID,
+		Email: user.Email,
+		CreatedAt: user.CreatedAt,
+	}, nil
 }

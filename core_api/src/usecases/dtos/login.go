@@ -1,6 +1,6 @@
 package dtos
 
-import "github.com/whitehackerh/veylo/api_server/src/domain/entities"
+import "time"
 
 type LoginInput struct {
 	Email    string
@@ -8,6 +8,8 @@ type LoginInput struct {
 }
 
 type LoginOutput struct {
-	User        *entities.User
+	ID          string
+	Email       string
+	CreatedAt   time.Time
 	AccessToken string
 }

@@ -10,9 +10,9 @@ import (
 func ToLoginResponse(output *dtos.LoginOutput) openapi.LoginResponse {
 	return openapi.LoginResponse{
 		User: openapi.User{
-			ID: output.User.ID,
-			Email: output.User.Email,
-			CreatedAt: output.User.CreatedAt.UTC().Truncate(time.Second),
+			ID: output.ID,
+			Email: output.Email,
+			CreatedAt: output.CreatedAt.UTC().Truncate(time.Second),
 		},
 		AccessToken: output.AccessToken,
 		TokenType: "Bearer",

@@ -36,7 +36,7 @@ func AuthMiddleware(tokenManager security.TokenManager, getUserUseCase ports.Get
 				return c.JSON(http.StatusInternalServerError, openapi.ErrorResponse{Error: "failed to authenticate user"})
 			}
 
-			c.Set("user", output.User)
+			c.Set("user", output)
 			return next(c)
 		}
 	}

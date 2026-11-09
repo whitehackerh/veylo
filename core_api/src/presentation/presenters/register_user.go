@@ -9,8 +9,8 @@ import (
 
 func ToRegisterUserResponse(output *dtos.RegisterUserOutput) openapi.User {
 	return openapi.User{
-		ID: output.User.ID,
-		Email: output.User.Email,
-		CreatedAt: output.User.CreatedAt.UTC().Truncate(time.Second),
+		ID: output.ID,
+		Email: output.Email,
+		CreatedAt: output.CreatedAt.UTC().Truncate(time.Second),
 	}
 }

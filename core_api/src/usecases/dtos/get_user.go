@@ -1,11 +1,13 @@
 package dtos
 
-import "github.com/whitehackerh/veylo/api_server/src/domain/entities"
+import "time"
 
 type GetUserInput struct {
 	UserID string
 }
 
 type GetUserOutput struct {
-	User *entities.User
+	ID        string
+	Email     string
+	CreatedAt time.Time
 }

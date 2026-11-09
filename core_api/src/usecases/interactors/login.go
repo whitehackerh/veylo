@@ -36,5 +36,10 @@ func (i *LoginInteractor) Execute(ctx context.Context, input dtos.LoginInput) (*
 		return nil, err
 	}
 
-	return &dtos.LoginOutput{User: user, AccessToken: accessToken}, nil
+	return &dtos.LoginOutput{
+		ID: user.ID,
+		Email: user.Email,
+		CreatedAt: user.CreatedAt,
+		AccessToken: accessToken,
+	}, nil
 }

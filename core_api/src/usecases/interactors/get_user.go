@@ -20,5 +20,9 @@ func (i *GetUserInteractor) Execute(ctx context.Context, input dtos.GetUserInput
 	if err != nil {
 		return nil, err
 	}
-	return &dtos.GetUserOutput{User: user}, nil
+	return &dtos.GetUserOutput{
+		ID: user.ID,
+		Email: user.Email,
+		CreatedAt: user.CreatedAt,
+	}, nil
 }
