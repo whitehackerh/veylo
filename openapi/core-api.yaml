@@ -180,15 +180,11 @@ components:
           format: date-time
         path:
           type: string
-        data:
-          oneOf:
-            - type: array
-            - type: object
-            - type: "null"
+        data: {}
         error:
-          oneOf:
+          allOf:
             - $ref: "#/components/schemas/ApiError"
-            - type: "null"
+          nullable: true
     HealthResponse:
       type: object
       required:
