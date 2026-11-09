@@ -3,6 +3,7 @@ package postgres
 import (
 	"context"
 	"errors"
+	"time"
 
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgconn"
@@ -45,13 +46,16 @@ func (r *UserRepository) FindByID(ctx context.Context, id string) (*entities.Use
 }
 
 func (r *UserRepository) findOne(ctx context.Context, query string, arg string) (*entities.User, error) {
-	user := &entities.User{}
-	err := r.db.QueryRow(ctx, query, arg).Scan(&user.ID, &user.Email, &user.PasswordHash, &user.CreatedAt)
+	var id string
+	var email string
+	var passwordHash string
+	var createdAt time.Time
+	err := r.db.QueryRow(ctx, query, arg).Scan(&id, &email, &passwordHash, &createdAt)
 	if errors.Is(err, pgx.ErrNoRows) {
 		return nil, shared.ErrUserNotFound
 	}
 	if err != nil {
 		return nil, err
 	}
-	return user, nil
+	return entities.RestoreUser(id, email, passwordHash, createdAt), nil
 }

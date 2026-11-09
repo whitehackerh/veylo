@@ -5,7 +5,6 @@ import (
 	"net/mail"
 	"strings"
 
-	"github.com/google/uuid"
 	"golang.org/x/crypto/bcrypt"
 
 	"github.com/whitehackerh/veylo/api_server/src/domain/entities"
@@ -34,14 +33,14 @@ func (i *RegisterUserInteractor) Execute(ctx context.Context, input dtos.Registe
 		return nil, err
 	}
 
-	user := &entities.User{ID: uuid.NewString(), Email: email, PasswordHash: string(passwordHash)}
+	user := entities.NewUser(email, string(passwordHash))
 	if err := i.userRepository.Create(ctx, user); err != nil {
 		return nil, err
 	}
 
 	return &dtos.RegisterUserOutput{
-		ID: user.ID,
-		Email: user.Email,
+		ID:        user.ID,
+		Email:     user.Email,
 		CreatedAt: user.CreatedAt,
 	}, nil
 }
