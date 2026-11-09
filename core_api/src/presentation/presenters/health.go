@@ -2,6 +2,6 @@ package presenters
 
 import "github.com/whitehackerh/veylo/api_server/src/presentation/openapi"
 
-func ToHealthResponse() openapi.HealthResponse {
+func ToHealthData() openapi.HealthResponse {
 	return openapi.HealthResponse{Status: "ok"}
 }
