@@ -3,13 +3,14 @@ package presenters
 import (
 	"time"
 
+	"github.com/whitehackerh/veylo/api_server/src/presentation/openapi"
 	"github.com/whitehackerh/veylo/api_server/src/usecases/dtos"
 )
 
-func ToGetUserData(output *dtos.GetUserOutput) map[string]interface{} {
-	return map[string]interface{}{
-		"id":         output.ID.String(),
-		"email":      output.Email,
-		"created_at": output.CreatedAt.UTC().Truncate(time.Second),
+func ToGetUserData(output *dtos.GetUserOutput) openapi.User {
+	return openapi.User{
+		ID:        output.ID.String(),
+		Email:     output.Email,
+		CreatedAt: output.CreatedAt.UTC().Truncate(time.Second),
 	}
 }
