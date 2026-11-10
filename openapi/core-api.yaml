@@ -180,7 +180,8 @@ components:
           format: date-time
         path:
           type: string
-        data: {}
+        data:
+          x-go-type: any
         error:
           allOf:
             - $ref: "#/components/schemas/ApiError"
