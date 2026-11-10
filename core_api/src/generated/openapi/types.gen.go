@@ -17,10 +17,10 @@ type ApiError struct {
 
 // ApiResponse defines model for ApiResponse.
 type ApiResponse struct {
-	Data      interface{} `json:"data"`
-	Error     *ApiError   `json:"error"`
-	Path      string      `json:"path"`
-	TimeStamp time.Time   `json:"time_stamp"`
+	Data      any       `json:"data"`
+	Error     *ApiError `json:"error"`
+	Path      string    `json:"path"`
+	TimeStamp time.Time `json:"time_stamp"`
 }
 
 // HealthResponse defines model for HealthResponse.
