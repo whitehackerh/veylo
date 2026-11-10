@@ -14,10 +14,10 @@ import (
 )
 
 type LoginHandler struct {
-	loginUseCase ports.LoginUseCase
+	loginUseCase ports.UseCase[dtos.LoginInput, dtos.LoginOutput]
 }
 
-func NewLoginHandler(loginUseCase ports.LoginUseCase) *LoginHandler {
+func NewLoginHandler(loginUseCase ports.UseCase[dtos.LoginInput, dtos.LoginOutput]) *LoginHandler {
 	return &LoginHandler{loginUseCase: loginUseCase}
 }
 

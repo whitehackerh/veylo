@@ -21,24 +21,24 @@ func NewRegisterUserInteractor(userRepository repositories.UserRepository) *Regi
 	return &RegisterUserInteractor{userRepository: userRepository}
 }
 
-func (i *RegisterUserInteractor) Execute(ctx context.Context, input dtos.RegisterUserInput) (*dtos.RegisterUserOutput, error) {
+func (i *RegisterUserInteractor) Execute(ctx context.Context, input dtos.RegisterUserInput) (dtos.RegisterUserOutput, error) {
 	email := strings.ToLower(strings.TrimSpace(input.Email))
 	parsedEmail, err := mail.ParseAddress(email)
 	if err != nil || parsedEmail.Address != email || len(input.Password) < 8 || len(input.Password) > 72 {
-		return nil, shared.ErrInvalidRegistrationInput
+		return dtos.RegisterUserOutput{}, shared.ErrInvalidRegistrationInput
 	}
 
 	passwordHash, err := bcrypt.GenerateFromPassword([]byte(input.Password), bcrypt.DefaultCost)
 	if err != nil {
-		return nil, err
+		return dtos.RegisterUserOutput{}, err
 	}
 
 	user := entities.NewUser(email, string(passwordHash))
 	if err := i.userRepository.Create(ctx, user); err != nil {
-		return nil, err
+		return dtos.RegisterUserOutput{}, err
 	}
 
-	return &dtos.RegisterUserOutput{
+	return dtos.RegisterUserOutput{
 		ID:        user.ID,
 		Email:     user.Email,
 		CreatedAt: user.CreatedAt,

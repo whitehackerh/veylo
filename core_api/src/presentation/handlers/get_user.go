@@ -16,10 +16,10 @@ func NewGetUserHandler() *GetUserHandler {
 }
 
 func (h *GetUserHandler) Handle(c *echo.Context) error {
-	output, ok := c.Get("user").(*dtos.GetUserOutput)
+	output, ok := c.Get("user").(dtos.GetUserOutput)
 	if !ok {
 		return c.JSON(http.StatusUnauthorized, presenters.ToErrorResponse(c.Request().URL.Path, "UNAUTHORIZED", "unauthorized"))
 	}
 
-	return c.JSON(http.StatusOK, presenters.ToAPIResponse(c.Request().URL.Path, presenters.ToGetUserResponse(output), nil))
+	return c.JSON(http.StatusOK, presenters.ToAPIResponse(c.Request().URL.Path, presenters.ToGetUserResponse(&output), nil))
 }

@@ -1,2 +1,2 @@
-// Package ports defines the input interfaces exposed by use cases.
+// Package ports defines generic use case interfaces.
 package ports

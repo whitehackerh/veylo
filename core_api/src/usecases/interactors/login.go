@@ -21,22 +21,22 @@ func NewLoginInteractor(userRepository repositories.UserRepository, tokenManager
 	return &LoginInteractor{userRepository: userRepository, tokenManager: tokenManager}
 }
 
-func (i *LoginInteractor) Execute(ctx context.Context, input dtos.LoginInput) (*dtos.LoginOutput, error) {
+func (i *LoginInteractor) Execute(ctx context.Context, input dtos.LoginInput) (dtos.LoginOutput, error) {
 	email := strings.ToLower(strings.TrimSpace(input.Email))
 	user, err := i.userRepository.FindByEmail(ctx, email)
 	if err != nil {
-		return nil, shared.ErrInvalidCredentials
+		return dtos.LoginOutput{}, shared.ErrInvalidCredentials
 	}
 	if err := bcrypt.CompareHashAndPassword([]byte(user.PasswordHash), []byte(input.Password)); err != nil {
-		return nil, shared.ErrInvalidCredentials
+		return dtos.LoginOutput{}, shared.ErrInvalidCredentials
 	}
 
 	accessToken, err := i.tokenManager.Issue(user.ID.String())
 	if err != nil {
-		return nil, err
+		return dtos.LoginOutput{}, err
 	}
 
-	return &dtos.LoginOutput{
+	return dtos.LoginOutput{
 		ID:          user.ID,
 		Email:       user.Email,
 		CreatedAt:   user.CreatedAt,

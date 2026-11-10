@@ -18,17 +18,17 @@ func NewGetUserInteractor(userRepository repositories.UserRepository) *GetUserIn
 	return &GetUserInteractor{userRepository: userRepository}
 }
 
-func (i *GetUserInteractor) Execute(ctx context.Context, input dtos.GetUserInput) (*dtos.GetUserOutput, error) {
+func (i *GetUserInteractor) Execute(ctx context.Context, input dtos.GetUserInput) (dtos.GetUserOutput, error) {
 	userID, err := uuid.Parse(input.UserID)
 	if err != nil {
-		return nil, shared.ErrUserNotFound
+		return dtos.GetUserOutput{}, shared.ErrUserNotFound
 	}
 
 	user, err := i.userRepository.FindByID(ctx, userID)
 	if err != nil {
-		return nil, err
+		return dtos.GetUserOutput{}, err
 	}
-	return &dtos.GetUserOutput{
+	return dtos.GetUserOutput{
 		ID:        user.ID,
 		Email:     user.Email,
 		CreatedAt: user.CreatedAt,

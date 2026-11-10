@@ -14,10 +14,10 @@ import (
 )
 
 type RegisterUserHandler struct {
-	registerUserUseCase ports.RegisterUserUseCase
+	registerUserUseCase ports.UseCase[dtos.RegisterUserInput, dtos.RegisterUserOutput]
 }
 
-func NewRegisterUserHandler(registerUserUseCase ports.RegisterUserUseCase) *RegisterUserHandler {
+func NewRegisterUserHandler(registerUserUseCase ports.UseCase[dtos.RegisterUserInput, dtos.RegisterUserOutput]) *RegisterUserHandler {
 	return &RegisterUserHandler{registerUserUseCase: registerUserUseCase}
 }
 

@@ -7,6 +7,7 @@ import (
 
 	"github.com/whitehackerh/veylo/api_server/src/presentation/handlers"
 	"github.com/whitehackerh/veylo/api_server/src/presentation/presenters"
+	"github.com/whitehackerh/veylo/api_server/src/usecases/dtos"
 	"github.com/whitehackerh/veylo/api_server/src/usecases/ports"
 	"github.com/whitehackerh/veylo/api_server/src/usecases/security"
 )
@@ -17,7 +18,7 @@ func RegisterRoutes(
 	loginHandler *handlers.LoginHandler,
 	getUserHandler *handlers.GetUserHandler,
 	tokenManager security.TokenManager,
-	getUserUseCase ports.GetUserUseCase,
+	getUserUseCase ports.UseCase[dtos.GetUserInput, dtos.GetUserOutput],
 ) {
 	api := e.Group("/api")
 

@@ -14,7 +14,7 @@ import (
 	"github.com/whitehackerh/veylo/api_server/src/usecases/shared"
 )
 
-func AuthMiddleware(tokenManager security.TokenManager, getUserUseCase ports.GetUserUseCase) echo.MiddlewareFunc {
+func AuthMiddleware(tokenManager security.TokenManager, getUserUseCase ports.UseCase[dtos.GetUserInput, dtos.GetUserOutput]) echo.MiddlewareFunc {
 	return func(next echo.HandlerFunc) echo.HandlerFunc {
 		return func(c *echo.Context) error {
 			authorization := c.Request().Header.Get("Authorization")
