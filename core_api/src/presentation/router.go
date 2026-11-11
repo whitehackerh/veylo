@@ -48,6 +48,7 @@ func RegisterRoutes(
 			echo.HeaderAccept,
 			echo.HeaderAuthorization,
 		},
+		ExposeHeaders: []string{echo.HeaderAuthorization},
 	}))
 
 	api := e.Group("/api")
