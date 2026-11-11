@@ -6,6 +6,7 @@ import (
 	"github.com/labstack/echo/v5"
 
 	"github.com/whitehackerh/veylo/api_server/src/presentation/handlers"
+	"github.com/whitehackerh/veylo/api_server/src/presentation/middlewares"
 	"github.com/whitehackerh/veylo/api_server/src/presentation/presenters"
 	"github.com/whitehackerh/veylo/api_server/src/usecases/dtos"
 	"github.com/whitehackerh/veylo/api_server/src/usecases/ports"
@@ -35,5 +36,5 @@ func RegisterRoutes(
 	})
 	api.POST("/auth/register", handlers.RegisterUser.Handle)
 	api.POST("/auth/login", handlers.Login.Handle)
-	api.GET("/users/me", handlers.GetUser.Handle, handlers.AuthMiddleware(tokenManager, useCases.GetUser))
+	api.GET("/users/me", handlers.GetUser.Handle, middlewares.Auth(tokenManager, useCases.GetUser))
 }
