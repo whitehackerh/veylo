@@ -34,8 +34,8 @@ func RegisterRoutes(
 	api.GET("/health", func(c *echo.Context) error {
 		return c.JSON(http.StatusOK, presenters.ToAPIResponse(c.Request().URL.Path, presenters.ToHealthData(), nil))
 	})
-	api.POST("/register", handlers.SignUp.Handle)
-	api.POST("/login", handlers.SignIn.Handle)
+	api.POST("/sign-up", handlers.SignUp.Handle)
+	api.POST("/sign-in", handlers.SignIn.Handle)
 
 	authenticated := api.Group("")
 	authenticated.Use(middlewares.Auth(tokenManager, useCases.GetUser))

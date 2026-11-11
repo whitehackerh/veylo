@@ -24,7 +24,7 @@ paths:
                         type: "null"
         "500":
           $ref: "#/components/responses/ErrorInternalServer"
-  /register:
+  /sign-up:
     post:
       operationId: signUp
       requestBody:
@@ -53,7 +53,7 @@ paths:
           $ref: "#/components/responses/ErrorConflict"
         "500":
           $ref: "#/components/responses/ErrorInternalServer"
-  /login:
+  /sign-in:
     post:
       operationId: signIn
       requestBody:
@@ -130,6 +130,15 @@ components:
           type: string
           minLength: 8
           maxLength: 72
+    SignInRequest:
+      type: object
+      required:
+        - email
+        - password
+      properties:
+        email:
+          type: string
+          format: email
     SignInRequest:
       type: object
       required:
