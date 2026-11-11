@@ -23,12 +23,12 @@ func AuthMiddleware(tokenManager security.TokenManager, getUserUseCase ports.Use
 				return c.JSON(http.StatusUnauthorized, presenters.ToErrorResponse(c.Request().URL.Path, "UNAUTHORIZED", "unauthorized"))
 			}
 
-			userID, err := tokenManager.Verify(strings.TrimPrefix(authorization, prefix))
+			userId, err := tokenManager.Verify(strings.TrimPrefix(authorization, prefix))
 			if err != nil {
 				return c.JSON(http.StatusUnauthorized, presenters.ToErrorResponse(c.Request().URL.Path, "UNAUTHORIZED", "unauthorized"))
 			}
 
-			output, err := getUserUseCase.Execute(c.Request().Context(), dtos.GetUserInput{UserID: userID})
+			output, err := getUserUseCase.Execute(c.Request().Context(), dtos.GetUserInput{UserId: userId})
 			if err != nil {
 				if errors.Is(err, shared.ErrUserNotFound) {
 					return c.JSON(http.StatusUnauthorized, presenters.ToErrorResponse(c.Request().URL.Path, "UNAUTHORIZED", "unauthorized"))

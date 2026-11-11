@@ -7,11 +7,11 @@ import (
 )
 
 type GetUserInput struct {
-	UserID string
+	UserId string
 }
 
 type GetUserOutput struct {
-	ID        uuid.UUID
+	Id        uuid.UUID
 	Email     string
 	CreatedAt time.Time
 }

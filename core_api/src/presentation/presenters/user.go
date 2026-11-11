@@ -9,7 +9,7 @@ import (
 
 func ToUser(output *dtos.GetUserOutput) openapi.User {
 	return openapi.User{
-		ID:        output.ID.String(),
+		Id:        output.Id.String(),
 		Email:     output.Email,
 		CreatedAt: output.CreatedAt.UTC().Truncate(time.Second),
 	}

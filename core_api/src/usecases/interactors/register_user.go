@@ -39,7 +39,7 @@ func (i *RegisterUserInteractor) Execute(ctx context.Context, input dtos.Registe
 	}
 
 	return dtos.RegisterUserOutput{
-		ID:        user.ID,
+		Id:        user.Id,
 		Email:     user.Email,
 		CreatedAt: user.CreatedAt,
 	}, nil

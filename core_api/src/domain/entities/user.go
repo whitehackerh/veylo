@@ -7,7 +7,7 @@ import (
 )
 
 type User struct {
-	ID           uuid.UUID
+	Id           uuid.UUID
 	Email        string
 	PasswordHash string
 	CreatedAt    time.Time
@@ -15,7 +15,7 @@ type User struct {
 
 func NewUser(email string, passwordHash string) *User {
 	return &User{
-		ID:           uuid.New(),
+		Id:           uuid.New(),
 		Email:        email,
 		PasswordHash: passwordHash,
 		CreatedAt:    time.Now(),
@@ -24,7 +24,7 @@ func NewUser(email string, passwordHash string) *User {
 
 func RestoreUser(id uuid.UUID, email string, passwordHash string, createdAt time.Time) *User {
 	return &User{
-		ID:           id,
+		Id:           id,
 		Email:        email,
 		PasswordHash: passwordHash,
 		CreatedAt:    createdAt,

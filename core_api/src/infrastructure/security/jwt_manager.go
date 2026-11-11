@@ -33,14 +33,14 @@ func NewJWTManager(secret string, issuer string, ttl time.Duration) *JWTManager 
 	return &JWTManager{secret: []byte(secret), issuer: issuer, ttl: ttl}
 }
 
-func (m *JWTManager) Issue(userID string) (string, error) {
+func (m *JWTManager) Issue(userId string) (string, error) {
 	now := time.Now()
 	header, err := json.Marshal(jwtHeader{Algorithm: "HS256", Type: "JWT"})
 	if err != nil {
 		return "", err
 	}
 	claims, err := json.Marshal(jwtClaims{
-		Issuer: m.issuer, Subject: userID, Audience: []string{"veylo"},
+		Issuer: m.issuer, Subject: userId, Audience: []string{"veylo"},
 		IssuedAt: now.Unix(), ExpiresAt: now.Add(m.ttl).Unix(),
 	})
 	if err != nil {

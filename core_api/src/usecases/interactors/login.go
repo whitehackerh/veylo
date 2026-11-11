@@ -31,13 +31,13 @@ func (i *LoginInteractor) Execute(ctx context.Context, input dtos.LoginInput) (d
 		return dtos.LoginOutput{}, shared.ErrInvalidCredentials
 	}
 
-	accessToken, err := i.tokenManager.Issue(user.ID.String())
+	accessToken, err := i.tokenManager.Issue(user.Id.String())
 	if err != nil {
 		return dtos.LoginOutput{}, err
 	}
 
 	return dtos.LoginOutput{
-		ID:          user.ID,
+		Id:          user.Id,
 		Email:       user.Email,
 		CreatedAt:   user.CreatedAt,
 		AccessToken: accessToken,

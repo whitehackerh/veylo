@@ -12,7 +12,7 @@ type RegisterUserInput struct {
 }
 
 type RegisterUserOutput struct {
-	ID        uuid.UUID
+	Id        uuid.UUID
 	Email     string
 	CreatedAt time.Time
 }

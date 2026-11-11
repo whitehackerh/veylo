@@ -25,7 +25,7 @@ func (r *UserRepository) Create(ctx context.Context, user *entities.User) error 
 	_, err := r.db.Exec(ctx,
 		`INSERT INTO users (id, email, password_hash, created_at)
 		 VALUES ($1, $2, $3, $4)`,
-		user.ID, user.Email, user.PasswordHash, user.CreatedAt,
+		user.Id, user.Email, user.PasswordHash, user.CreatedAt,
 	)
 	if err != nil {
 		var pgError *pgconn.PgError
@@ -41,7 +41,7 @@ func (r *UserRepository) FindByEmail(ctx context.Context, email string) (*entiti
 	return r.findOne(ctx, `SELECT id, email, password_hash, created_at FROM users WHERE email = $1`, email)
 }
 
-func (r *UserRepository) FindByID(ctx context.Context, id uuid.UUID) (*entities.User, error) {
+func (r *UserRepository) FindById(ctx context.Context, id uuid.UUID) (*entities.User, error) {
 	return r.findOne(ctx, `SELECT id, email, password_hash, created_at FROM users WHERE id = $1`, id)
 }
 

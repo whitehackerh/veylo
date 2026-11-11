@@ -12,7 +12,7 @@ type LoginInput struct {
 }
 
 type LoginOutput struct {
-	ID          uuid.UUID
+	Id          uuid.UUID
 	Email       string
 	CreatedAt   time.Time
 	AccessToken string
