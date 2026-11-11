@@ -20,11 +20,14 @@ services:
     build:
       context: ./core_api
       dockerfile: Dockerfile
+      target: development
     restart: unless-stopped
     env_file:
       - .env
     ports:
       - "${CORE_API_PORT}:8080"
+    volumes:
+      - ./core_api:/app
     depends_on:
       db:
         condition: service_healthy
