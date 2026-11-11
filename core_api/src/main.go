@@ -15,7 +15,7 @@ func main() {
 	}
 	defer app.Pool.Close()
 
-	port := os.Getenv("API_PORT")
+	port := os.Getenv("CORE_API_PORT")
 	if port == "" {
 		port = "8080"
 	}
