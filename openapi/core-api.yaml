@@ -24,7 +24,7 @@ paths:
                         type: "null"
         "500":
           $ref: "#/components/responses/ErrorInternalServer"
-  /auth/register:
+  /register:
     post:
       operationId: registerUser
       requestBody:
@@ -53,7 +53,7 @@ paths:
           $ref: "#/components/responses/ErrorConflict"
         "500":
           $ref: "#/components/responses/ErrorInternalServer"
-  /auth/login:
+  /login:
     post:
       operationId: login
       requestBody:
