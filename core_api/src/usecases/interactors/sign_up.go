@@ -24,7 +24,7 @@ func NewSignUpInteractor(userRepository repositories.UserRepository) *SignUpInte
 func (i *SignUpInteractor) Execute(ctx context.Context, input dtos.SignUpInput) (dtos.SignUpOutput, error) {
 	email := strings.ToLower(strings.TrimSpace(input.Email))
 	parsedEmail, err := mail.ParseAddress(email)
-	if err != nil || parsedEmail.Address != email || len(input.Password) < 8 || len(input.Password) > 72 {
+	if err != nil || parsedEmail.Address != email {
 		return dtos.SignUpOutput{}, shared.ErrInvalidSignUpInput
 	}
 

@@ -3,5 +3,8 @@
 .env.*
 !.env.example
 
+# --- Go ---
+/core_api/.air-tmp/
+
 # --- Rust ---
 /streaming_api/target/

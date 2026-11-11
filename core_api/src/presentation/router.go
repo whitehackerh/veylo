@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/labstack/echo/v5"
+	echomiddleware "github.com/labstack/echo/v5/middleware"
 
 	"github.com/whitehackerh/veylo/api_server/src/presentation/handlers"
 	"github.com/whitehackerh/veylo/api_server/src/presentation/middlewares"
@@ -29,6 +30,26 @@ func RegisterRoutes(
 	useCases UseCases,
 	tokenManager security.TokenManager,
 ) {
+	e.Use(echomiddleware.CORSWithConfig(echomiddleware.CORSConfig{
+		AllowOrigins: []string{
+			"http://localhost:8082",
+		},
+		AllowMethods: []string{
+			http.MethodGet,
+			http.MethodPost,
+			http.MethodPut,
+			http.MethodPatch,
+			http.MethodDelete,
+			http.MethodOptions,
+		},
+		AllowHeaders: []string{
+			echo.HeaderOrigin,
+			echo.HeaderContentType,
+			echo.HeaderAccept,
+			echo.HeaderAuthorization,
+		},
+	}))
+
 	api := e.Group("/api")
 
 	api.GET("/health", func(c *echo.Context) error {

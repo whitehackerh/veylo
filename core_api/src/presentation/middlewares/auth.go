@@ -17,6 +17,10 @@ import (
 func Auth(tokenManager security.TokenManager, getUserUseCase ports.UseCase[dtos.GetUserInput, dtos.GetUserOutput]) echo.MiddlewareFunc {
 	return func(next echo.HandlerFunc) echo.HandlerFunc {
 		return func(c *echo.Context) error {
+			if c.Request().Method == http.MethodOptions {
+				return next(c)
+			}
+
 			authorization := c.Request().Header.Get("Authorization")
 			const prefix = "Bearer "
 			if !strings.HasPrefix(authorization, prefix) {
