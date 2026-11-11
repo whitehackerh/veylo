@@ -28,14 +28,14 @@ type HealthResponse struct {
 	Status string `json:"status"`
 }
 
-// LoginRequest defines model for LoginRequest.
-type LoginRequest struct {
+// SignInRequest defines model for SignInRequest.
+type SignInRequest struct {
 	Email    openapi_types.Email `json:"email"`
 	Password string              `json:"password"`
 }
 
-// RegisterUserRequest defines model for RegisterUserRequest.
-type RegisterUserRequest struct {
+// SignUpRequest defines model for SignUpRequest.
+type SignUpRequest struct {
 	Email    openapi_types.Email `json:"email"`
 	Password string              `json:"password"`
 }
@@ -62,8 +62,8 @@ type ErrorNotFound = ApiResponse
 // ErrorUnauthorized defines model for ErrorUnauthorized.
 type ErrorUnauthorized = ApiResponse
 
-// LoginJSONRequestBody defines body for Login for application/json ContentType.
-type LoginJSONRequestBody = LoginRequest
+// SignInJSONRequestBody defines body for SignIn for application/json ContentType.
+type SignInJSONRequestBody = SignInRequest
 
-// RegisterUserJSONRequestBody defines body for RegisterUser for application/json ContentType.
-type RegisterUserJSONRequestBody = RegisterUserRequest
+// SignUpJSONRequestBody defines body for SignUp for application/json ContentType.
+type SignUpJSONRequestBody = SignUpRequest

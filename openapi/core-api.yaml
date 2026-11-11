@@ -26,16 +26,16 @@ paths:
           $ref: "#/components/responses/ErrorInternalServer"
   /register:
     post:
-      operationId: registerUser
+      operationId: signUp
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/RegisterUserRequest"
+              $ref: "#/components/schemas/SignUpRequest"
       responses:
         "201":
-          description: User registered successfully. Sign in to obtain an access token.
+          description: User signed up successfully. Sign in to obtain an access token.
           content:
             application/json:
               schema:
@@ -55,16 +55,16 @@ paths:
           $ref: "#/components/responses/ErrorInternalServer"
   /login:
     post:
-      operationId: login
+      operationId: signIn
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/LoginRequest"
+              $ref: "#/components/schemas/SignInRequest"
       responses:
         "200":
-          description: Authenticated. Token returned in Authorization header.
+          description: Signed in successfully. Token returned in Authorization header.
           headers:
             Authorization:
               description: Bearer access token
@@ -117,7 +117,7 @@ components:
       scheme: bearer
       bearerFormat: JWT
   schemas:
-    RegisterUserRequest:
+    SignUpRequest:
       type: object
       required:
         - email
@@ -130,7 +130,7 @@ components:
           type: string
           minLength: 8
           maxLength: 72
-    LoginRequest:
+    SignInRequest:
       type: object
       required:
         - email

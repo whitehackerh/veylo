@@ -6,12 +6,12 @@ import (
 	"github.com/google/uuid"
 )
 
-type RegisterUserInput struct {
+type SignUpInput struct {
 	Email    string
 	Password string
 }
 
-type RegisterUserOutput struct {
+type SignUpOutput struct {
 	Id        uuid.UUID
 	Email     string
 	CreatedAt time.Time

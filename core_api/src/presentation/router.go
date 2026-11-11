@@ -14,9 +14,9 @@ import (
 )
 
 type Handlers struct {
-	RegisterUser *handlers.RegisterUserHandler
-	Login        *handlers.LoginHandler
-	GetUser      *handlers.GetUserHandler
+	SignUp *handlers.SignUpHandler
+	SignIn *handlers.SignInHandler
+	GetUser *handlers.GetUserHandler
 }
 
 type UseCases struct {
@@ -34,8 +34,8 @@ func RegisterRoutes(
 	api.GET("/health", func(c *echo.Context) error {
 		return c.JSON(http.StatusOK, presenters.ToAPIResponse(c.Request().URL.Path, presenters.ToHealthData(), nil))
 	})
-	api.POST("/register", handlers.RegisterUser.Handle)
-	api.POST("/login", handlers.Login.Handle)
+	api.POST("/register", handlers.SignUp.Handle)
+	api.POST("/login", handlers.SignIn.Handle)
 
 	authenticated := api.Group("")
 	authenticated.Use(middlewares.Auth(tokenManager, useCases.GetUser))

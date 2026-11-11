@@ -13,21 +13,21 @@ import (
 	"github.com/whitehackerh/veylo/api_server/src/usecases/shared"
 )
 
-type LoginHandler struct {
-	loginUseCase ports.UseCase[dtos.LoginInput, dtos.LoginOutput]
+type SignInHandler struct {
+	signInUseCase ports.UseCase[dtos.SignInInput, dtos.SignInOutput]
 }
 
-func NewLoginHandler(loginUseCase ports.UseCase[dtos.LoginInput, dtos.LoginOutput]) *LoginHandler {
-	return &LoginHandler{loginUseCase: loginUseCase}
+func NewSignInHandler(signInUseCase ports.UseCase[dtos.SignInInput, dtos.SignInOutput]) *SignInHandler {
+	return &SignInHandler{signInUseCase: signInUseCase}
 }
 
-func (h *LoginHandler) Handle(c *echo.Context) error {
-	request := new(openapi.LoginRequest)
+func (h *SignInHandler) Handle(c *echo.Context) error {
+	request := new(openapi.SignInRequest)
 	if err := c.Bind(request); err != nil {
 		return c.JSON(http.StatusBadRequest, presenters.ToErrorResponse(c.Request().URL.Path, "INVALID_REQUEST", "invalid request body"))
 	}
 
-	output, err := h.loginUseCase.Execute(c.Request().Context(), dtos.LoginInput{
+	output, err := h.signInUseCase.Execute(c.Request().Context(), dtos.SignInInput{
 		Email:    request.Email,
 		Password: request.Password,
 	})
@@ -35,9 +35,9 @@ func (h *LoginHandler) Handle(c *echo.Context) error {
 		if errors.Is(err, shared.ErrInvalidCredentials) {
 			return c.JSON(http.StatusUnauthorized, presenters.ToErrorResponse(c.Request().URL.Path, "INVALID_CREDENTIALS", "invalid email or password"))
 		}
-		return c.JSON(http.StatusInternalServerError, presenters.ToErrorResponse(c.Request().URL.Path, "INTERNAL_SERVER_ERROR", "failed to login"))
+		return c.JSON(http.StatusInternalServerError, presenters.ToErrorResponse(c.Request().URL.Path, "INTERNAL_SERVER_ERROR", "failed to sign in"))
 	}
 
 	c.Response().Header().Set("Authorization", "Bearer "+output.AccessToken)
-	return c.JSON(http.StatusOK, presenters.ToAPIResponse(c.Request().URL.Path, presenters.ToLoginResponse(), nil))
+	return c.JSON(http.StatusOK, presenters.ToAPIResponse(c.Request().URL.Path, presenters.ToSignInResponse(), nil))
 }

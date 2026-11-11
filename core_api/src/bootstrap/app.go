@@ -39,17 +39,17 @@ func NewApp(ctx context.Context) (*App, error) {
 	userRepository := postgres.NewUserRepository(pool)
 	tokenManager := security.NewJWTManager(jwtSecret, "veylo-core-api", 15*time.Minute)
 
-	registerUserUseCase := interactors.NewRegisterUserInteractor(userRepository)
-	loginUseCase := interactors.NewLoginInteractor(userRepository, tokenManager)
+	signUpUseCase := interactors.NewSignUpInteractor(userRepository)
+	signInUseCase := interactors.NewSignInInteractor(userRepository, tokenManager)
 	getUserUseCase := interactors.NewGetUserInteractor(userRepository)
 
 	server := echo.New()
 	presentation.RegisterRoutes(
 		server,
 		presentation.Handlers{
-			RegisterUser: handlers.NewRegisterUserHandler(registerUserUseCase),
-			Login:        handlers.NewLoginHandler(loginUseCase),
-			GetUser:      handlers.NewGetUserHandler(),
+			SignUp: handlers.NewSignUpHandler(signUpUseCase),
+			SignIn: handlers.NewSignInHandler(signInUseCase),
+			GetUser: handlers.NewGetUserHandler(),
 		},
 		presentation.UseCases{
 			GetUser: getUserUseCase,
