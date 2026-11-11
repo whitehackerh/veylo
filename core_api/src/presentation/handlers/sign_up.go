@@ -28,7 +28,7 @@ func (h *SignUpHandler) Handle(c *echo.Context) error {
 	}
 
 	_, err := h.signUpUseCase.Execute(c.Request().Context(), dtos.SignUpInput{
-		Email:    request.Email,
+		Email:    string(request.Email),
 		Password: request.Password,
 	})
 	if err != nil {
