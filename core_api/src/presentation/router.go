@@ -12,20 +12,28 @@ import (
 	"github.com/whitehackerh/veylo/api_server/src/usecases/security"
 )
 
+type Handlers struct {
+	RegisterUser *handlers.RegisterUserHandler
+	Login        *handlers.LoginHandler
+	GetUser      *handlers.GetUserHandler
+}
+
+type UseCases struct {
+	GetUser ports.UseCase[dtos.GetUserInput, dtos.GetUserOutput]
+}
+
 func RegisterRoutes(
 	e *echo.Echo,
-	registerUserHandler *handlers.RegisterUserHandler,
-	loginHandler *handlers.LoginHandler,
-	getUserHandler *handlers.GetUserHandler,
+	handlers Handlers,
+	useCases UseCases,
 	tokenManager security.TokenManager,
-	getUserUseCase ports.UseCase[dtos.GetUserInput, dtos.GetUserOutput],
 ) {
 	api := e.Group("/api")
 
 	api.GET("/health", func(c *echo.Context) error {
 		return c.JSON(http.StatusOK, presenters.ToAPIResponse(c.Request().URL.Path, presenters.ToHealthData(), nil))
 	})
-	api.POST("/auth/register", registerUserHandler.Handle)
-	api.POST("/auth/login", loginHandler.Handle)
-	api.GET("/users/me", getUserHandler.Handle, handlers.AuthMiddleware(tokenManager, getUserUseCase))
+	api.POST("/auth/register", handlers.RegisterUser.Handle)
+	api.POST("/auth/login", handlers.Login.Handle)
+	api.GET("/users/me", handlers.GetUser.Handle, handlers.AuthMiddleware(tokenManager, useCases.GetUser))
 }

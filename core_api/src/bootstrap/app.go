@@ -43,12 +43,19 @@ func NewApp(ctx context.Context) (*App, error) {
 	loginUseCase := interactors.NewLoginInteractor(userRepository, tokenManager)
 	getUserUseCase := interactors.NewGetUserInteractor(userRepository)
 
-	registerUserHandler := handlers.NewRegisterUserHandler(registerUserUseCase)
-	loginHandler := handlers.NewLoginHandler(loginUseCase)
-	getUserHandler := handlers.NewGetUserHandler()
-
 	server := echo.New()
-	presentation.RegisterRoutes(server, registerUserHandler, loginHandler, getUserHandler, tokenManager, getUserUseCase)
+	presentation.RegisterRoutes(
+		server,
+		presentation.Handlers{
+			RegisterUser: handlers.NewRegisterUserHandler(registerUserUseCase),
+			Login:        handlers.NewLoginHandler(loginUseCase),
+			GetUser:      handlers.NewGetUserHandler(),
+		},
+		presentation.UseCases{
+			GetUser: getUserUseCase,
+		},
+		tokenManager,
+	)
 
 	return &App{Server: server, Pool: pool}, nil
 }
