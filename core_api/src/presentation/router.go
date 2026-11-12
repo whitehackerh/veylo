@@ -54,7 +54,7 @@ func RegisterRoutes(
 	api := e.Group("/api")
 
 	api.GET("/health", func(c *echo.Context) error {
-		return c.JSON(http.StatusOK, presenters.ToAPIResponse(c.Request().URL.Path, presenters.ToHealthData(), nil))
+		return c.JSON(http.StatusOK, presenters.ToApiResponse(c.Request().URL.Path, presenters.ToHealthData(), nil))
 	})
 	api.POST("/sign-up", handlers.SignUp.Handle)
 	api.POST("/sign-in", handlers.SignIn.Handle)
