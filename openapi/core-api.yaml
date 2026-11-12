@@ -181,9 +181,11 @@ components:
         data:
           x-go-type: any
         error:
-          allOf:
+          anyOf:
             - $ref: "#/components/schemas/ApiError"
-          nullable: true
+            - type: "null"
+          x-go-type: "*ApiError"
+          x-go-type-skip-optional-pointer: true
     HealthResponse:
       type: object
       required:
