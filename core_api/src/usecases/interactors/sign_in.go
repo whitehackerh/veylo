@@ -2,6 +2,7 @@ package interactors
 
 import (
 	"context"
+	"errors"
 	"strings"
 
 	"golang.org/x/crypto/bcrypt"
@@ -25,7 +26,10 @@ func (i *SignInInteractor) Execute(ctx context.Context, input dtos.SignInInput) 
 	email := strings.ToLower(strings.TrimSpace(input.Email))
 	user, err := i.userRepository.FindByEmail(ctx, email)
 	if err != nil {
-		return dtos.SignInOutput{}, shared.ErrInvalidCredentials
+		if errors.Is(err, shared.ErrUserNotFound) {
+			return dtos.SignInOutput{}, shared.ErrInvalidCredentials
+		}
+		return dtos.SignInOutput{}, err
 	}
 	if err := bcrypt.CompareHashAndPassword([]byte(user.PasswordHash), []byte(input.Password)); err != nil {
 		return dtos.SignInOutput{}, shared.ErrInvalidCredentials

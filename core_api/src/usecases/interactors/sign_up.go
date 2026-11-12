@@ -25,7 +25,10 @@ func (i *SignUpInteractor) Execute(ctx context.Context, input dtos.SignUpInput) 
 	if input.Email == "" || input.Password == "" {
 		return dtos.SignUpOutput{}, shared.ErrInvalidSignUpInput
 	}
-	
+	if len(input.Password) > 72 {
+		return dtos.SignUpOutput{}, shared.ErrInvalidSignUpInput
+	}
+
 	email := strings.ToLower(strings.TrimSpace(input.Email))
 	parsedEmail, err := mail.ParseAddress(email)
 	if err != nil || parsedEmail.Address != email {
