@@ -22,7 +22,7 @@ func NewSignUpInteractor(userRepository repositories.UserRepository) *SignUpInte
 }
 
 func (i *SignUpInteractor) Execute(ctx context.Context, input dtos.SignUpInput) (dtos.SignUpOutput, error) {
-	if input.email == "" || input.password == "" {
+	if input.Email == "" || input.Password == "" {
 		return dtos.SignUpOutput{}, shared.ErrInvalidSignUpInput
 	}
 	
