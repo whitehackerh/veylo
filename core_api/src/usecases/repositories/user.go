@@ -1,0 +1,15 @@
+package repositories
+
+import (
+	"context"
+
+	"github.com/google/uuid"
+
+	"github.com/whitehackerh/veylo/api_server/src/domain/entities"
+)
+
+type UserRepository interface {
+	Create(ctx context.Context, user *entities.User) error
+	FindByEmail(ctx context.Context, email string) (*entities.User, error)
+	FindById(ctx context.Context, id uuid.UUID) (*entities.User, error)
+}

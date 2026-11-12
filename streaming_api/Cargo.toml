@@ -10,4 +10,4 @@ tokio = { version = "1.54.1", features = ["full"] }
 
 [[bin]]
 name = "streaming_api"
-path = "main.rs"
+path = "src/main.rs"
