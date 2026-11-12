@@ -39,5 +39,5 @@ func (h *SignInHandler) Handle(c *echo.Context) error {
 	}
 
 	c.Response().Header().Set("Authorization", "Bearer "+output.AccessToken)
-	return c.JSON(http.StatusOK, presenters.ToAPIResponse(c.Request().URL.Path, presenters.ToSignInResponse(), nil))
+	return c.JSON(http.StatusOK, presenters.ToApiResponse(c.Request().URL.Path, presenters.ToSignInResponse(), nil))
 }

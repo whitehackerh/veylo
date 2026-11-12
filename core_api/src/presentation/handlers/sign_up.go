@@ -41,5 +41,5 @@ func (h *SignUpHandler) Handle(c *echo.Context) error {
 		return c.JSON(http.StatusInternalServerError, presenters.ToErrorResponse(c.Request().URL.Path, "INTERNAL_SERVER_ERROR", "failed to sign up"))
 	}
 
-	return c.JSON(http.StatusCreated, presenters.ToAPIResponse(c.Request().URL.Path, presenters.ToSignUpResponse(), nil))
+	return c.JSON(http.StatusCreated, presenters.ToApiResponse(c.Request().URL.Path, presenters.ToSignUpResponse(), nil))
 }
