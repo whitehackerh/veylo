@@ -8,3 +8,6 @@
 
 # --- Rust ---
 /streaming_api/target/
+
+# --- Storage ---
+/storage
