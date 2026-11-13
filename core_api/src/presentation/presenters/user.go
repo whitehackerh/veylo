@@ -18,9 +18,9 @@ type User struct {
 
 func ToUser(user User) openapi.User {
 	return openapi.User{
-		Id:        openapi_types.UUID(user.Id),
-		Email:     openapi_types.Email(user.Email),
-		Name:      user.Name,
 		CreatedAt: user.CreatedAt.UTC().Truncate(time.Second),
+		Email:     openapi_types.Email(user.Email),
+		Id:        openapi_types.UUID(user.Id),
+		Name:      user.Name,
 	}
 }
