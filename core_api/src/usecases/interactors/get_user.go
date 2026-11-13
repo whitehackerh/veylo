@@ -31,6 +31,7 @@ func (i *GetUserInteractor) Execute(ctx context.Context, input dtos.GetUserInput
 	return dtos.GetUserOutput{
 		Id:        user.Id,
 		Email:     user.Email,
+		Name:      user.Name,
 		CreatedAt: user.CreatedAt,
 	}, nil
 }
