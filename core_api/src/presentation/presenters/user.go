@@ -12,13 +12,15 @@ import (
 type User struct {
 	Id        uuid.UUID
 	Email     string
+	Name      string
 	CreatedAt time.Time
 }
 
 func ToUser(user User) openapi.User {
 	return openapi.User{
-		Id:    openapi_types.UUID(user.Id),
-		Email: openapi_types.Email(user.Email),
 		CreatedAt: user.CreatedAt.UTC().Truncate(time.Second),
+		Email:     openapi_types.Email(user.Email),
+		Id:        openapi_types.UUID(user.Id),
+		Name:      user.Name,
 	}
 }

@@ -14,6 +14,7 @@ type SignInInput struct {
 type SignInOutput struct {
 	Id          uuid.UUID
 	Email       string
+	Name        string
 	CreatedAt   time.Time
 	AccessToken string
 }

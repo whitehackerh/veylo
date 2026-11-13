@@ -22,7 +22,7 @@ func NewSignUpInteractor(userRepository repositories.UserRepository) *SignUpInte
 }
 
 func (i *SignUpInteractor) Execute(ctx context.Context, input dtos.SignUpInput) (dtos.SignUpOutput, error) {
-	if input.Email == "" || input.Password == "" {
+	if input.Name == "" || input.Email == "" || input.Password == "" {
 		return dtos.SignUpOutput{}, shared.ErrInvalidSignUpInput
 	}
 	if len(input.Password) > 72 {
@@ -40,7 +40,7 @@ func (i *SignUpInteractor) Execute(ctx context.Context, input dtos.SignUpInput) 
 		return dtos.SignUpOutput{}, err
 	}
 
-	user := entities.NewUser(email, string(passwordHash))
+	user := entities.NewUser(email, string(passwordHash), input.Name)
 	if err := i.userRepository.Create(ctx, user); err != nil {
 		return dtos.SignUpOutput{}, err
 	}
@@ -48,6 +48,7 @@ func (i *SignUpInteractor) Execute(ctx context.Context, input dtos.SignUpInput) 
 	return dtos.SignUpOutput{
 		Id:        user.Id,
 		Email:     user.Email,
+		Name:      user.Name,
 		CreatedAt: user.CreatedAt,
 	}, nil
 }

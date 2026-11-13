@@ -43,6 +43,7 @@ func (i *SignInInteractor) Execute(ctx context.Context, input dtos.SignInInput) 
 	return dtos.SignInOutput{
 		Id:          user.Id,
 		Email:       user.Email,
+		Name:        user.Name,
 		CreatedAt:   user.CreatedAt,
 		AccessToken: accessToken,
 	}, nil

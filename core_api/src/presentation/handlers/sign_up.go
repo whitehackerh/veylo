@@ -30,6 +30,7 @@ func (h *SignUpHandler) Handle(c *echo.Context) error {
 	_, err := h.signUpUseCase.Execute(c.Request().Context(), dtos.SignUpInput{
 		Email:    string(request.Email),
 		Password: request.Password,
+		Name:     request.Name,
 	})
 	if err != nil {
 		if errors.Is(err, shared.ErrEmailAlreadyExists) {

@@ -7,8 +7,9 @@ import (
 
 func ToGetUserResponse(output *dtos.GetUserOutput) openapi.User {
 	return ToUser(User{
-		Id: output.Id,
-		Email: output.Email,
+		Id:        output.Id,
+		Email:     output.Email,
+		Name:      output.Name,
 		CreatedAt: output.CreatedAt,
 	})
 }

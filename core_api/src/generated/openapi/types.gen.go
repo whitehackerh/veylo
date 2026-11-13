@@ -37,6 +37,7 @@ type SignInRequest struct {
 // SignUpRequest defines model for SignUpRequest.
 type SignUpRequest struct {
 	Email    openapi_types.Email `json:"email"`
+	Name     string              `json:"name"`
 	Password string              `json:"password"`
 }
 
@@ -45,6 +46,7 @@ type User struct {
 	CreatedAt time.Time           `json:"created_at"`
 	Email     openapi_types.Email `json:"email"`
 	Id        openapi_types.UUID  `json:"id"`
+	Name      string              `json:"name"`
 }
 
 // ErrorBadRequest defines model for ErrorBadRequest.

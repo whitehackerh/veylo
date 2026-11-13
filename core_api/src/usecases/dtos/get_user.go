@@ -13,5 +13,6 @@ type GetUserInput struct {
 type GetUserOutput struct {
 	Id        uuid.UUID
 	Email     string
+	Name      string
 	CreatedAt time.Time
 }
