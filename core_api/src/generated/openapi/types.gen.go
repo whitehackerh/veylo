@@ -23,9 +23,28 @@ type ApiResponse struct {
 	TimeStamp time.Time `json:"time_stamp"`
 }
 
+// Channel defines model for Channel.
+type Channel struct {
+	BannerUrl   *string            `json:"banner_url"`
+	Description *string            `json:"description"`
+	Handle      string             `json:"handle"`
+	IconUrl     *string            `json:"icon_url"`
+	Id          openapi_types.UUID `json:"id"`
+	Name        string             `json:"name"`
+}
+
 // HealthResponse defines model for HealthResponse.
 type HealthResponse struct {
 	Status string `json:"status"`
+}
+
+// PostChannelRequest defines model for PostChannelRequest.
+type PostChannelRequest struct {
+	Banner      *openapi_types.File `json:"banner,omitempty"`
+	Description string              `json:"description"`
+	Handle      string              `json:"handle"`
+	Icon        *openapi_types.File `json:"icon,omitempty"`
+	Name        string              `json:"name"`
 }
 
 // SignInRequest defines model for SignInRequest.
@@ -63,6 +82,9 @@ type ErrorNotFound = ApiResponse
 
 // ErrorUnauthorized defines model for ErrorUnauthorized.
 type ErrorUnauthorized = ApiResponse
+
+// CreateChannelMultipartRequestBody defines body for CreateChannel for multipart/form-data ContentType.
+type CreateChannelMultipartRequestBody = PostChannelRequest
 
 // SignInJSONRequestBody defines body for SignIn for application/json ContentType.
 type SignInJSONRequestBody = SignInRequest

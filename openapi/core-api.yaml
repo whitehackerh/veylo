@@ -110,6 +110,38 @@ paths:
           $ref: "#/components/responses/ErrorUnauthorized"
         "500":
           $ref: "#/components/responses/ErrorInternalServer"
+  /channels:
+    post:
+      tags:
+        - Channel
+      operationId: createChannel
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              $ref: "#/components/schemas/PostChannelRequest"
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/ApiResponse"
+                  - type: object
+                    properties:
+                      data:
+                        $ref: "#/components/schemas/Channel"
+                      error:
+                        type: "null"
+        "400":
+          $ref: "#/components/responses/ErrorBadRequest"
+        "401":
+          $ref: "#/components/responses/ErrorUnauthorized"
+        "500":
+          $ref: "#/components/responses/ErrorInternalServer"
 components:
   securitySchemes:
     bearerAuth:
@@ -143,6 +175,28 @@ components:
           format: email
         password:
           type: string
+    PostChannelRequest:
+      type: object
+      required:
+        - name
+        - handle
+        - description
+      properties:
+        name:
+          type: string
+        handle:
+          type: string
+        description:
+          anyOf:
+            - type: string
+            - type: "null"
+          type: string
+        icon:
+          type: string
+          format: binary
+        banner:
+          type: string
+          format: binary
     User:
       type: object
       required:
@@ -162,6 +216,38 @@ components:
         created_at:
           type: string
           format: date-time
+    Channel:
+      type: object
+      required:
+        - id
+        - name
+        - handle
+        - description
+        - icon_url
+        - banner_url
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        handle:
+          type: string
+        description:
+          anyOf:
+            - type: string
+            - type: "null"
+          x-go-type: "*string"
+        icon_url:
+          anyOf:
+            - type: string
+            - type: "null"
+          x-go-type: "*string"
+        banner_url:
+          anyOf:
+            - type: string
+            - type: "null"
+          x-go-type: "*string"
     ApiError:
       type: object
       required:
