@@ -21,7 +21,7 @@ type Channel struct {
 
 func NewChannel(
 	id uuid.UUID,
-	user_id uuid.UUID,
+	userId uuid.UUID,
 	name string,
 	handle string,
 	description *string,
@@ -31,7 +31,7 @@ func NewChannel(
 	now := time.Now()
 	return &Channel{
 		Id:          id,
-		UserId:      user_id,
+		UserId:      userId,
 		Name:        name,
 		Handle:      handle,
 		Description: description,
@@ -45,6 +45,7 @@ func NewChannel(
 
 func RestoreChannel(
 	id uuid.UUID,
+	userId uuid.UUID,
 	name string,
 	handle string,
 	description *string,
@@ -56,6 +57,7 @@ func RestoreChannel(
 ) *Channel {
 	return &Channel{
 		Id:          id,
+		UserId:      userId
 		Name:        name,
 		Handle:      handle,
 		Description: description,
