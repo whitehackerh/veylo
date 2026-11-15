@@ -3,27 +3,8 @@ info:
   title: Veylo Core API
   version: 1.0.0
 servers:
-  - url: http://localhost:8080/api
+  - url: http://127.0.0.1:8080/api
 paths:
-  /health:
-    get:
-      operationId: getHealth
-      responses:
-        "200":
-          description: Health status
-          content:
-            application/json:
-              schema:
-                allOf:
-                  - $ref: "#/components/schemas/ApiResponse"
-                  - type: object
-                    properties:
-                      data:
-                        $ref: "#/components/schemas/HealthResponse"
-                      error:
-                        type: "null"
-        "500":
-          $ref: "#/components/responses/ErrorInternalServer"
   /sign-up:
     post:
       operationId: signUp
@@ -190,7 +171,7 @@ components:
           anyOf:
             - type: string
             - type: "null"
-          type: string
+          x-go-type: "*string"
         icon:
           type: string
           format: binary
@@ -225,6 +206,8 @@ components:
         - description
         - icon_url
         - banner_url
+        - created_at
+        - updated_at
       properties:
         id:
           type: string
@@ -248,6 +231,12 @@ components:
             - type: string
             - type: "null"
           x-go-type: "*string"
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
     ApiError:
       type: object
       required:
@@ -279,13 +268,6 @@ components:
             - type: "null"
           x-go-type: "*ApiError"
           x-go-type-skip-optional-pointer: true
-    HealthResponse:
-      type: object
-      required:
-        - status
-      properties:
-        status:
-          type: string
 
   responses:
     ErrorBadRequest:

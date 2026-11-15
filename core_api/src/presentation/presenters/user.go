@@ -16,7 +16,13 @@ type User struct {
 	CreatedAt time.Time
 }
 
-func ToUser(user User) openapi.User {
+type UserPresenter struct{}
+
+func NewUserPresenter() *UserPresenter {
+	return &UserPresenter{}
+}
+
+func (p *UserPresenter) ToResponse(user User) openapi.User {
 	return openapi.User{
 		CreatedAt: user.CreatedAt.UTC().Truncate(time.Second),
 		Email:     openapi_types.Email(user.Email),

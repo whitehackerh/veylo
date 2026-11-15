@@ -26,22 +26,19 @@ type ApiResponse struct {
 // Channel defines model for Channel.
 type Channel struct {
 	BannerUrl   *string            `json:"banner_url"`
+	CreatedAt   time.Time          `json:"created_at"`
 	Description *string            `json:"description"`
 	Handle      string             `json:"handle"`
 	IconUrl     *string            `json:"icon_url"`
 	Id          openapi_types.UUID `json:"id"`
 	Name        string             `json:"name"`
-}
-
-// HealthResponse defines model for HealthResponse.
-type HealthResponse struct {
-	Status string `json:"status"`
+	UpdatedAt   time.Time          `json:"updated_at"`
 }
 
 // PostChannelRequest defines model for PostChannelRequest.
 type PostChannelRequest struct {
 	Banner      *openapi_types.File `json:"banner,omitempty"`
-	Description string              `json:"description"`
+	Description *string             `json:"description"`
 	Handle      string              `json:"handle"`
 	Icon        *openapi_types.File `json:"icon,omitempty"`
 	Name        string              `json:"name"`
