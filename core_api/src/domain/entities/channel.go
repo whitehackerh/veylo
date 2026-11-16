@@ -57,7 +57,7 @@ func RestoreChannel(
 ) *Channel {
 	return &Channel{
 		Id:          id,
-		UserId:      userId
+		UserId:      userId,
 		Name:        name,
 		Handle:      handle,
 		Description: description,

@@ -2,7 +2,9 @@ package interactors
 
 import (
 	"context"
+	"errors"
 	"sync"
+	"time"
 
 	"github.com/google/uuid"
 	"github.com/whitehackerh/veylo/api_server/src/domain/entities"
@@ -73,11 +75,7 @@ func (i *CreateChannelInteractor) Execute(
 
 	for err := range errCh {
 		if err != nil {
-			for _, path := range imagePaths {
-				_ = i.imageStorage.Delete(ctx, path)
-			}
-
-			return dtos.CreateChannelOutput{}, err
+			return dtos.CreateChannelOutput{}, errors.Join(err, i.cleanupImages(imagePaths))
 		}
 	}
 
@@ -105,11 +103,7 @@ func (i *CreateChannelInteractor) Execute(
 		return repos.Channel().Create(ctx, channel)
 	})
 	if err != nil {
-		for _, path := range imagePaths {
-			_ = i.imageStorage.Delete(ctx, path)
-		}
-
-		return dtos.CreateChannelOutput{}, err
+		return dtos.CreateChannelOutput{}, errors.Join(err, i.cleanupImages(imagePaths))
 	}
 
 	return dtos.CreateChannelOutput{
@@ -122,4 +116,19 @@ func (i *CreateChannelInteractor) Execute(
 		CreatedAt:   channel.CreatedAt,
 		UpdatedAt:   channel.UpdatedAt,
 	}, nil
+}
+
+func (i *CreateChannelInteractor) cleanupImages(imagePaths map[storages.ImageType]string) error {
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	var cleanupErrors []error
+
+	for _, path := range imagePaths {
+		if err := i.imageStorage.Delete(ctx, path); err != nil {
+			cleanupErrors = append(cleanupErrors, err)
+		}
+	}
+
+	return errors.Join(cleanupErrors...)
 }

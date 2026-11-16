@@ -24,7 +24,11 @@ func NewSignUpHandler(
 	signUpUseCase ports.UseCase[dtos.SignUpInput, dtos.SignUpOutput],
 	signUpPresenter *presenters.SignUpPresenter,
 ) *SignUpHandler {
-	return &SignUpHandler{signUpUseCase: signUpUseCase}
+	return &SignUpHandler{
+		responsePresenter: responsePresenter,
+		signUpUseCase:     signUpUseCase,
+		signUpPresenter:   signUpPresenter,
+	}
 }
 
 func (h *SignUpHandler) Handle(c *echo.Context) error {
