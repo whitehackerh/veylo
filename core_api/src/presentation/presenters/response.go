@@ -6,7 +6,13 @@ import (
 	"github.com/whitehackerh/veylo/api_server/src/generated/openapi"
 )
 
-func ToApiResponse(path string, data any, apiError *openapi.ApiError) openapi.ApiResponse {
+type ResponsePresenter struct{}
+
+func NewResponsePresenter() *ResponsePresenter {
+	return &ResponsePresenter{}
+}
+
+func (p *ResponsePresenter) ToApiResponse(path string, data any, apiError *openapi.ApiError) openapi.ApiResponse {
 	return openapi.ApiResponse{
 		TimeStamp: time.Now().UTC(),
 		Path:      path,
@@ -15,8 +21,8 @@ func ToApiResponse(path string, data any, apiError *openapi.ApiError) openapi.Ap
 	}
 }
 
-func ToErrorResponse(path string, code string, message string) openapi.ApiResponse {
-	return ToApiResponse(path, nil, &openapi.ApiError{
+func (p *ResponsePresenter) ToErrorResponse(path string, code string, message string) openapi.ApiResponse {
+	return p.ToApiResponse(path, nil, &openapi.ApiError{
 		Code:    code,
 		Message: message,
 	})

@@ -1,5 +1,11 @@
 package presenters
 
-func ToSignInResponse() struct{} {
+type SignInPresenter struct{}
+
+func NewSignInPresenter() *SignInPresenter {
+	return &SignInPresenter{}
+}
+
+func (p *SignInPresenter) ToResponse() struct{} {
 	return struct{}{}
 }

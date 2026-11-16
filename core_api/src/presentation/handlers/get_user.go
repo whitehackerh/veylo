@@ -9,17 +9,26 @@ import (
 	"github.com/whitehackerh/veylo/api_server/src/usecases/dtos"
 )
 
-type GetUserHandler struct{}
+type GetUserHandler struct {
+	responsePresenter *presenters.ResponsePresenter
+	getUserPresenter  *presenters.GetUserPresenter
+}
 
-func NewGetUserHandler() *GetUserHandler {
-	return &GetUserHandler{}
+func NewGetUserHandler(
+	responsePresenter *presenters.ResponsePresenter,
+	getUserPresenter *presenters.GetUserPresenter,
+) *GetUserHandler {
+	return &GetUserHandler{
+		responsePresenter: responsePresenter,
+		getUserPresenter:  getUserPresenter,
+	}
 }
 
 func (h *GetUserHandler) Handle(c *echo.Context) error {
 	output, ok := c.Get("user").(dtos.GetUserOutput)
 	if !ok {
-		return c.JSON(http.StatusUnauthorized, presenters.ToErrorResponse(c.Request().URL.Path, "UNAUTHORIZED", "unauthorized"))
+		return c.JSON(http.StatusUnauthorized, h.responsePresenter.ToErrorResponse(c.Request().URL.Path, "UNAUTHORIZED", "unauthorized"))
 	}
 
-	return c.JSON(http.StatusOK, presenters.ToApiResponse(c.Request().URL.Path, presenters.ToGetUserResponse(&output), nil))
+	return c.JSON(http.StatusOK, h.responsePresenter.ToApiResponse(c.Request().URL.Path, h.getUserPresenter.ToResponse(&output), nil))
 }

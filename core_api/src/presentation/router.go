@@ -15,19 +15,17 @@ import (
 )
 
 type Handlers struct {
-	SignUp *handlers.SignUpHandler
-	SignIn *handlers.SignInHandler
-	GetUser *handlers.GetUserHandler
-}
-
-type UseCases struct {
-	GetUser ports.UseCase[dtos.GetUserInput, dtos.GetUserOutput]
+	CreateChannel *handlers.CreateChannelHandler
+	GetUser       *handlers.GetUserHandler
+	SignIn        *handlers.SignInHandler
+	SignUp        *handlers.SignUpHandler
 }
 
 func RegisterRoutes(
 	e *echo.Echo,
 	handlers Handlers,
-	useCases UseCases,
+	responsePresenter *presenters.ResponsePresenter,
+	getUserUseCase ports.UseCase[dtos.GetUserInput, dtos.GetUserOutput],
 	tokenManager security.TokenManager,
 ) {
 	e.Use(echomiddleware.CORSWithConfig(echomiddleware.CORSConfig{
@@ -52,15 +50,12 @@ func RegisterRoutes(
 	}))
 
 	api := e.Group("/api")
-
-	api.GET("/health", func(c *echo.Context) error {
-		return c.JSON(http.StatusOK, presenters.ToApiResponse(c.Request().URL.Path, presenters.ToHealthData(), nil))
-	})
-	api.POST("/sign-up", handlers.SignUp.Handle)
 	api.POST("/sign-in", handlers.SignIn.Handle)
+	api.POST("/sign-up", handlers.SignUp.Handle)
 
 	authenticated := api.Group("")
-	authenticated.Use(middlewares.Auth(tokenManager, useCases.GetUser))
+	authenticated.Use(middlewares.Auth(tokenManager, responsePresenter, getUserUseCase))
 
 	authenticated.GET("/users/me", handlers.GetUser.Handle)
+	authenticated.POST("/channels", handlers.CreateChannel.Handle)
 }

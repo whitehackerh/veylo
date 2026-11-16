@@ -24,10 +24,14 @@ services:
     restart: unless-stopped
     env_file:
       - .env
+    environment:
+      STORAGE_PATH: ${STORAGE_PATH}
+      MEDIA_BASE_URL: ${CORE_API_MEDIA_BASE_URL}
     ports:
       - "${CORE_API_PORT}:${CORE_API_PORT}"
     volumes:
       - ./core_api:/app
+      - ./storage:/app/storage
     depends_on:
       db:
         condition: service_healthy

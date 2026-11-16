@@ -3,27 +3,8 @@ info:
   title: Veylo Core API
   version: 1.0.0
 servers:
-  - url: http://localhost:8080/api
+  - url: http://127.0.0.1:8080/api
 paths:
-  /health:
-    get:
-      operationId: getHealth
-      responses:
-        "200":
-          description: Health status
-          content:
-            application/json:
-              schema:
-                allOf:
-                  - $ref: "#/components/schemas/ApiResponse"
-                  - type: object
-                    properties:
-                      data:
-                        $ref: "#/components/schemas/HealthResponse"
-                      error:
-                        type: "null"
-        "500":
-          $ref: "#/components/responses/ErrorInternalServer"
   /sign-up:
     post:
       operationId: signUp
@@ -110,6 +91,39 @@ paths:
           $ref: "#/components/responses/ErrorUnauthorized"
         "500":
           $ref: "#/components/responses/ErrorInternalServer"
+  /channels:
+    post:
+      tags:
+        - Channel
+      operationId: createChannel
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              $ref: "#/components/schemas/PostChannelRequest"
+      responses:
+        "201":
+          description: Channel created successfully.
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/ApiResponse"
+                  - type: object
+                    properties:
+                      data:
+                        $ref: "#/components/schemas/Channel"
+                      error:
+                        type: "null"
+        "400":
+          $ref: "#/components/responses/ErrorBadRequest"
+        "401":
+          $ref: "#/components/responses/ErrorUnauthorized"
+        "500":
+          $ref: "#/components/responses/ErrorInternalServer"
 components:
   securitySchemes:
     bearerAuth:
@@ -143,6 +157,28 @@ components:
           format: email
         password:
           type: string
+    PostChannelRequest:
+      type: object
+      required:
+        - name
+        - handle
+        - description
+      properties:
+        name:
+          type: string
+        handle:
+          type: string
+        description:
+          anyOf:
+            - type: string
+            - type: "null"
+          x-go-type: "*string"
+        icon:
+          type: string
+          format: binary
+        banner:
+          type: string
+          format: binary
     User:
       type: object
       required:
@@ -160,6 +196,46 @@ components:
         name:
           type: string
         created_at:
+          type: string
+          format: date-time
+    Channel:
+      type: object
+      required:
+        - id
+        - name
+        - handle
+        - description
+        - icon_url
+        - banner_url
+        - created_at
+        - updated_at
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        handle:
+          type: string
+        description:
+          anyOf:
+            - type: string
+            - type: "null"
+          x-go-type: "*string"
+        icon_url:
+          anyOf:
+            - type: string
+            - type: "null"
+          x-go-type: "*string"
+        banner_url:
+          anyOf:
+            - type: string
+            - type: "null"
+          x-go-type: "*string"
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
           type: string
           format: date-time
     ApiError:
@@ -193,13 +269,6 @@ components:
             - type: "null"
           x-go-type: "*ApiError"
           x-go-type-skip-optional-pointer: true
-    HealthResponse:
-      type: object
-      required:
-        - status
-      properties:
-        status:
-          type: string
 
   responses:
     ErrorBadRequest:

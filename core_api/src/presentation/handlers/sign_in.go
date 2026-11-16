@@ -14,17 +14,27 @@ import (
 )
 
 type SignInHandler struct {
-	signInUseCase ports.UseCase[dtos.SignInInput, dtos.SignInOutput]
+	responsePresenter *presenters.ResponsePresenter
+	signInUseCase     ports.UseCase[dtos.SignInInput, dtos.SignInOutput]
+	signInPresenter   *presenters.SignInPresenter
 }
 
-func NewSignInHandler(signInUseCase ports.UseCase[dtos.SignInInput, dtos.SignInOutput]) *SignInHandler {
-	return &SignInHandler{signInUseCase: signInUseCase}
+func NewSignInHandler(
+	responsePresenter *presenters.ResponsePresenter,
+	signInUseCase ports.UseCase[dtos.SignInInput, dtos.SignInOutput],
+	signInPresenter *presenters.SignInPresenter,
+) *SignInHandler {
+	return &SignInHandler{
+		responsePresenter: responsePresenter,
+		signInUseCase:     signInUseCase,
+		signInPresenter:   signInPresenter,
+	}
 }
 
 func (h *SignInHandler) Handle(c *echo.Context) error {
 	request := new(openapi.SignInRequest)
 	if err := c.Bind(request); err != nil {
-		return c.JSON(http.StatusBadRequest, presenters.ToErrorResponse(c.Request().URL.Path, "INVALID_REQUEST", "invalid request body"))
+		return c.JSON(http.StatusBadRequest, h.responsePresenter.ToErrorResponse(c.Request().URL.Path, "INVALID_REQUEST", "invalid request body"))
 	}
 
 	output, err := h.signInUseCase.Execute(c.Request().Context(), dtos.SignInInput{
@@ -33,11 +43,11 @@ func (h *SignInHandler) Handle(c *echo.Context) error {
 	})
 	if err != nil {
 		if errors.Is(err, shared.ErrInvalidCredentials) {
-			return c.JSON(http.StatusUnauthorized, presenters.ToErrorResponse(c.Request().URL.Path, "INVALID_CREDENTIALS", "invalid email or password"))
+			return c.JSON(http.StatusUnauthorized, h.responsePresenter.ToErrorResponse(c.Request().URL.Path, "INVALID_CREDENTIALS", "invalid email or password"))
 		}
-		return c.JSON(http.StatusInternalServerError, presenters.ToErrorResponse(c.Request().URL.Path, "INTERNAL_SERVER_ERROR", "failed to sign in"))
+		return c.JSON(http.StatusInternalServerError, h.responsePresenter.ToErrorResponse(c.Request().URL.Path, "INTERNAL_SERVER_ERROR", "failed to sign in"))
 	}
 
 	c.Response().Header().Set("Authorization", "Bearer "+output.AccessToken)
-	return c.JSON(http.StatusOK, presenters.ToApiResponse(c.Request().URL.Path, presenters.ToSignInResponse(), nil))
+	return c.JSON(http.StatusOK, h.responsePresenter.ToApiResponse(c.Request().URL.Path, h.signInPresenter.ToResponse(), nil))
 }
