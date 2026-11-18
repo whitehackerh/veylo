@@ -124,6 +124,49 @@ paths:
           $ref: "#/components/responses/ErrorUnauthorized"
         "500":
           $ref: "#/components/responses/ErrorInternalServer"
+  /channels/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        description: Channel ID
+        schema:
+          type: string
+          format: uuid
+    patch:
+      tags:
+        - Channel
+      operationId: updateChannel
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              $ref: "#/components/schemas/PatchChannelRequest"
+      responses:
+        "201":
+          description: Channel updated successfully.
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/ApiResponse"
+                  - type: object
+                    properties:
+                      data:
+                        $ref: "#/components/schemas/Channel"
+                      error:
+                        type: "null"
+        "400":
+          $ref: "#/components/responses/ErrorBadRequest"
+        "401":
+          $ref: "#/components/responses/ErrorUnauthorized"
+        '404':
+          $ref: '#/components/responses/ErrorNotFound'
+        "500":
+          $ref: "#/components/responses/ErrorInternalServer"
 components:
   securitySchemes:
     bearerAuth:
@@ -179,6 +222,34 @@ components:
         banner:
           type: string
           format: binary
+    PatchChannelRequest:
+      type: object
+      required:
+        - name
+        - handle
+        - description
+        - delete_icon
+        - delete_banner
+      properties:
+        name:
+          type: string
+        handle:
+          type: string
+        description:
+          anyOf:
+            - type: string
+            - type: "null"
+          x-go-type: "*string"
+        icon:
+          type: string
+          format: binary
+        delete_icon:
+          type: boolean
+        banner:
+          type: string
+          format: binary
+        delete_banner:
+          type: boolean
     User:
       type: object
       required:

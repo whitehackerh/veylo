@@ -35,6 +35,17 @@ type Channel struct {
 	UpdatedAt   time.Time          `json:"updated_at"`
 }
 
+// PatchChannelRequest defines model for PatchChannelRequest.
+type PatchChannelRequest struct {
+	Banner       *openapi_types.File `json:"banner,omitempty"`
+	DeleteBanner bool                `json:"delete_banner"`
+	DeleteIcon   bool                `json:"delete_icon"`
+	Description  *string             `json:"description"`
+	Handle       string              `json:"handle"`
+	Icon         *openapi_types.File `json:"icon,omitempty"`
+	Name         string              `json:"name"`
+}
+
 // PostChannelRequest defines model for PostChannelRequest.
 type PostChannelRequest struct {
 	Banner      *openapi_types.File `json:"banner,omitempty"`
@@ -82,6 +93,9 @@ type ErrorUnauthorized = ApiResponse
 
 // CreateChannelMultipartRequestBody defines body for CreateChannel for multipart/form-data ContentType.
 type CreateChannelMultipartRequestBody = PostChannelRequest
+
+// UpdateChannelMultipartRequestBody defines body for UpdateChannel for multipart/form-data ContentType.
+type UpdateChannelMultipartRequestBody = PatchChannelRequest
 
 // SignInJSONRequestBody defines body for SignIn for application/json ContentType.
 type SignInJSONRequestBody = SignInRequest
