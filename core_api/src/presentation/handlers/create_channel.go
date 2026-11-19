@@ -1,11 +1,12 @@
 package handlers
 
 import (
-	"errors"
 	"io"
+	"mime/multipart"
 	"net/http"
 
 	"github.com/labstack/echo/v5"
+	"github.com/whitehackerh/veylo/api_server/src/generated/openapi"
 	"github.com/whitehackerh/veylo/api_server/src/presentation/presenters"
 	"github.com/whitehackerh/veylo/api_server/src/usecases/dtos"
 	"github.com/whitehackerh/veylo/api_server/src/usecases/ports"
@@ -30,22 +31,14 @@ func NewCreateChannelHandler(
 }
 
 func (h *CreateChannelHandler) Handle(c *echo.Context) error {
-	if err := c.Request().ParseMultipartForm(32 << 20); err != nil {
+	request := new(openapi.PostChannelRequest)
+	if err := c.Bind(request); err != nil {
 		return c.JSON(http.StatusBadRequest, h.responsePresenter.ToErrorResponse(c.Request().URL.Path, "INVALID_REQUEST", "invalid request body"))
 	}
 
-	var description *string
-	if values := c.Request().MultipartForm.Value["description"]; len(values) > 0 {
-		description = &values[0]
-	}
-
-	readFile := func(field string) ([]byte, error) {
-		file, err := c.FormFile(field)
-		if err != nil {
-			if errors.Is(err, http.ErrMissingFile) {
-				return nil, nil
-			}
-			return nil, err
+	readFile := func(file *multipart.FileHeader) ([]byte, error) {
+		if file == nil {
+			return nil, nil
 		}
 
 		src, err := file.Open()
@@ -57,21 +50,21 @@ func (h *CreateChannelHandler) Handle(c *echo.Context) error {
 		return io.ReadAll(src)
 	}
 
-	icon, err := readFile("icon")
+	icon, err := readFile(request.Icon)
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, h.responsePresenter.ToErrorResponse(c.Request().URL.Path, "INVALID_REQUEST", "invalid icon"))
 	}
 
-	banner, err := readFile("banner")
+	banner, err := readFile(request.Banner)
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, h.responsePresenter.ToErrorResponse(c.Request().URL.Path, "INVALID_REQUEST", "invalid banner"))
 	}
 
 	output, err := h.createChannelUseCase.Execute(c.Request().Context(), dtos.CreateChannelInput{
 		UserId:      c.Get("user").(dtos.GetUserOutput).Id,
-		Name:        c.FormValue("name"),
-		Handle:      c.FormValue("handle"),
-		Description: description,
+		Name:        request.Name,
+		Handle:      request.Handle,
+		Description: request.Description,
 		Icon:        icon,
 		Banner:      banner,
 	})

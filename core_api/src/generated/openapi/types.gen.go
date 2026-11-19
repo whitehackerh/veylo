@@ -4,6 +4,7 @@
 package openapi
 
 import (
+	"mime/multipart"
 	"time"
 
 	openapi_types "github.com/oapi-codegen/runtime/types"
@@ -48,11 +49,11 @@ type PatchChannelRequest struct {
 
 // PostChannelRequest defines model for PostChannelRequest.
 type PostChannelRequest struct {
-	Banner      *openapi_types.File `json:"banner,omitempty"`
-	Description *string             `json:"description"`
-	Handle      string              `json:"handle"`
-	Icon        *openapi_types.File `json:"icon,omitempty"`
-	Name        string              `json:"name"`
+	Banner      *multipart.FileHeader `form:"banner" json:"banner,omitempty"`
+	Description *string               `form:"description" json:"description,omitempty"`
+	Handle      string                `form:"handle" json:"handle"`
+	Icon        *multipart.FileHeader `form:"icon" json:"icon,omitempty"`
+	Name        string                `form:"name" json:"name"`
 }
 
 // SignInRequest defines model for SignInRequest.

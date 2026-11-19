@@ -205,23 +205,31 @@ components:
       required:
         - name
         - handle
-        - description
       properties:
         name:
           type: string
+          x-oapi-codegen-extra-tags:
+            form: name
         handle:
           type: string
+          x-oapi-codegen-extra-tags:
+            form: handle
         description:
-          anyOf:
-            - type: string
-            - type: "null"
-          x-go-type: "*string"
+          type: string
+          x-oapi-codegen-extra-tags:
+            form: description
         icon:
           type: string
           format: binary
+          x-go-type: multipart.FileHeader
+          x-oapi-codegen-extra-tags:
+            form: icon
         banner:
           type: string
           format: binary
+          x-go-type: multipart.FileHeader
+          x-oapi-codegen-extra-tags:
+            form: banner
     PatchChannelRequest:
       type: object
       required:
